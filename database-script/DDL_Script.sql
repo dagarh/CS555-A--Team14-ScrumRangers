@@ -1,0 +1,13 @@
+CREATE DATABASE IF NOT EXISTS communitydb;
+
+USE communitydb;
+
+CREATE TABLE IF NOT EXISTS Video (
+	videoId INT PRIMARY KEY AUTO_INCREMENT,
+	userId INT NOT NULL,
+	location VARCHAR(255),
+	description TEXT,
+	video_url VARCHAR(255) NOT NULL,
+	postedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+	likes INT DEFAULT 0
+);
