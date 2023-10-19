@@ -36,6 +36,13 @@ function Settings({ navigation }) {
                   <Ionicons name="arrow-forward" size={22} color="black" style={styles.arrow} />
               </View>
           </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => navigateToScreen('ChangePassword')}>
+              <View style={styles.item}>
+                  <Text style={styles.Set}>Change Password</Text>
+                  <Ionicons name="arrow-forward" size={22} color="black" style={styles.arrow} />
+              </View>
+          </TouchableOpacity>
       </View>
   );
 }
