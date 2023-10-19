@@ -26,6 +26,12 @@ TypeScript
 
 Firebase
 
+Spring Boot
+
+Spring Data JPA
+
+Hibernate
+
 MySql
 
 Expo
