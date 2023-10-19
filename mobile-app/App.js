@@ -4,7 +4,7 @@ import { Ionicons,Octicons,AntDesign,MaterialIcons } from '@expo/vector-icons';
 //import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './homepage';
-
+import { useNavigation } from '@react-navigation/native';
 import { useContext, useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -38,6 +38,7 @@ function AuthStack() {
 
 function AuthenticatedStack() {
   const authCtx = useContext(AuthContext);
+  const navigation = useNavigation();
   return (
     <Stack.Navigator
       screenOptions={{
@@ -50,13 +51,23 @@ function AuthenticatedStack() {
         name="Explorer"
         component={WelcomeScreen}
         options={{
+          headerLeft: ({ tintColor }) => (
+            <View style={{ flexDirection: 'row' }}>
+              <IconButton
+                icon="person" 
+                color={tintColor}
+                size={24}
+                onPress={() => navigation.navigate('profile')} 
+              />
+            </View>
+          ),
           headerRight: ({ tintColor }) => (
-            <IconButton
-              icon="exit"
-              color={tintColor}
-              size={24}
-              onPress={authCtx.logout}
-            />
+              <IconButton
+                icon="exit"
+                color={tintColor}
+                size={24}
+                onPress={authCtx.logout}
+              />
           ),
         }}
       />

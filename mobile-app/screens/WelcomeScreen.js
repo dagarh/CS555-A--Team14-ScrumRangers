@@ -9,7 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Settings from './Settings';
 import Tourist from './Tourist';
 import LocalActivity from './Activity';
-
+import profile from './profile';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -45,6 +45,7 @@ function WelcomeScreen() {
         <Stack.Navigator initialRouteName="MainTabs">
             <Stack.Screen name="MainTabs" component={TabNavigator} options={{ headerShown: false }} />
             <Stack.Screen name="AddVideo" component={AddVideo} />
+            <Stack.Screen name="profile" component={profile} />
         </Stack.Navigator>
     );
 }
