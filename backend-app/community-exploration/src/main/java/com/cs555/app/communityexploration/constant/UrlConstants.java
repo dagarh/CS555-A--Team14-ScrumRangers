@@ -8,4 +8,5 @@ public interface UrlConstants {
 	
 	String CONTROLLER_URL = "/api/v1";
 	String VIDEO_URL = "/videos/location/{locName}";
+	String DEFAULT_VIDEO_URL = "/videos/";
 }

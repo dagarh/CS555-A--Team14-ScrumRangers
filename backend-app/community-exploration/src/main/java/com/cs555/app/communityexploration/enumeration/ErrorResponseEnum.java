@@ -6,8 +6,7 @@ package com.cs555.app.communityexploration.enumeration;
  */
 public enum ErrorResponseEnum {
 	
-	// Dummy enum constant
-	DUMMY("DUMMY_CODE", "DUMMY_MESSAGE");
+	NO_VIDEO_FOUND("NO_VIDEO_FOUND", "Video is not found!!!");
 	
 	private final String responseCode;
 	private final String responseMessage;

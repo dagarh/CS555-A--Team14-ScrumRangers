@@ -21,5 +21,7 @@ class CommunityExplorationApplicationTests {
 	void contextLoads() {
 		
 	}
+	
+	
 
 }
