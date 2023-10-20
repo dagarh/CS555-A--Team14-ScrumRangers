@@ -7,4 +7,5 @@ package com.cs555.app.communityexploration.constant;
 public interface UrlConstants {
 	
 	String CONTROLLER_URL = "/api/v1";
+	String VIDEO_URL = "/videos/location/{locName}";
 }
