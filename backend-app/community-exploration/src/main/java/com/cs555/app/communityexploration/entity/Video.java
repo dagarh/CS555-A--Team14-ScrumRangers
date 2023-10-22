@@ -39,6 +39,26 @@ public class Video {
 	
 	@Column(name = "Likes")
 	private int likes;
+	
+	/**
+	 * @param videoId
+	 * @param userId
+	 * @param location
+	 * @param description
+	 * @param videoUrl
+	 * @param postedAt
+	 * @param likes
+	 */
+	public Video(int videoId, int userId, String location, String description, String videoUrl,
+			int likes) {
+		super();
+		this.videoId = videoId;
+		this.userId = userId;
+		this.location = location;
+		this.description = description;
+		this.videoUrl = videoUrl;
+		this.likes = likes;
+	}
 
 	/**
 	 * @return the videoId

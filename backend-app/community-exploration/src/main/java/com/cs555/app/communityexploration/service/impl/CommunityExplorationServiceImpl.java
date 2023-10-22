@@ -32,20 +32,28 @@ public class CommunityExplorationServiceImpl implements CommunityExplorationServ
 		
 		List<Video> videoList = new ArrayList<>();
 		
+		GetVideosResponseDTO videosResponseDTO = new GetVideosResponseDTO();
+		List<GetVideoResponseDTO> videoResponseDTOList = new ArrayList<>();
+		videosResponseDTO.setVideos(videoResponseDTOList);
+		
 		/*
 		 * locName is optional in the API. So, if user does not
 		 * send any locName, then I'll return all the videos.
 		 * 
 		 * Otherwise, I'll filter based on provided location
 		 */
-		if(locName == null || locName.length() == 0) {
-			videoList = videoRepository.findAllVideos();
+		try {
+			if(locName == null || locName.length() == 0) {
+				videoList = videoRepository.findAllVideos();
+			} else {
+				// It means user has sent something in the location
+				videoList = videoRepository.findByLocation(locName);
+			} 
+		} catch(Exception e) {
+			// We will return empty response to the user in this case
+			errorList.add(new ErrorDTO(ErrorResponseEnum.DATABASE_ISSUE_FOUND, locName));
+			return videosResponseDTO;
 		}
-		
-		// It means user has sent something in the location
-		videoList = videoRepository.findByLocation(locName); 
-		
-		List<GetVideoResponseDTO> videoResponseDTOList = new ArrayList<>();
 		
 		if (CollectionUtils.isEmpty(videoList)) {
 			errorList.add(new ErrorDTO(ErrorResponseEnum.NO_VIDEO_FOUND, locName));
@@ -64,9 +72,6 @@ public class CommunityExplorationServiceImpl implements CommunityExplorationServ
 				videoResponseDTOList.add(videoResponseDTO);
 			}
 		}
-		
-		GetVideosResponseDTO videosResponseDTO = new GetVideosResponseDTO();
-		videosResponseDTO.setVideos(videoResponseDTOList);
 		
 		return videosResponseDTO;
 	}

@@ -6,7 +6,8 @@ package com.cs555.app.communityexploration.enumeration;
  */
 public enum ErrorResponseEnum {
 	
-	NO_VIDEO_FOUND("NO_VIDEO_FOUND", "Video is not found!!!");
+	NO_VIDEO_FOUND("NO_VIDEO_FOUND", "Video is not found!!!"),
+	DATABASE_ISSUE_FOUND("DATABASE_ISSUE_FOUND", "Database issue is found");
 	
 	private final String responseCode;
 	private final String responseMessage;
