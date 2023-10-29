@@ -53,5 +53,5 @@ npm install
 
 To Start expo all you have to do is run this line
 ```sh
-npx expo start
+npx expo start --go
 ```
