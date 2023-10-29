@@ -51,7 +51,7 @@ npm install expo-cli --global
 
 Install the needed packages while in the root folder of the project
 ```sh
-npm install
+npm install -g npm@10.2.0
 ```
 
 ## 📱 Usage
