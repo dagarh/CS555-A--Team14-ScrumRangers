@@ -47,8 +47,8 @@ function LoginScreen() {
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
-    resizeMode: 'cover', // You can adjust the image resizing mode as needed
-    justifyContent: 'center', // You can change the alignment as needed
+    resizeMode: 'cover', //  can adjust the image resizing mode as needed
+    justifyContent: 'center', //  can change the alignment as needed
   },
   container: {
     flex: 1,
