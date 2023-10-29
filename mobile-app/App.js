@@ -3,6 +3,7 @@ import { StyleSheet, Text, View ,Image,SafeAreaView, TouchableOpacity,TextInput}
 import { Ionicons,Octicons,AntDesign,MaterialIcons } from '@expo/vector-icons';
 //import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import HomeScreen from './homepage';
 import { useNavigation } from '@react-navigation/native';
 import { useContext, useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';

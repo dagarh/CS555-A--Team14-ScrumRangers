@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { AuthContext } from '../store/auth-context';
+import AddVideo from './AddVideo';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Settings from './Settings';
@@ -43,6 +44,7 @@ function WelcomeScreen() {
     return (
         <Stack.Navigator initialRouteName="MainTabs">
             <Stack.Screen name="MainTabs" component={TabNavigator} options={{ headerShown: false }} />
+            <Stack.Screen name="AddVideo" component={AddVideo} />
             <Stack.Screen name="profile" component={profile} />
         </Stack.Navigator>
     );
