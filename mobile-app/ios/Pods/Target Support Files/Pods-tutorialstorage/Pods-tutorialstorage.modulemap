@@ -1,0 +1,6 @@
+module Pods_tutorialstorage {
+  umbrella header "Pods-tutorialstorage-umbrella.h"
+
+  export *
+  module * { export * }
+}
