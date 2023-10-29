@@ -37,6 +37,11 @@ MySql
 Expo
 
 ## 💻 Install
+Navigate to the mobile-app folder in the project directory to install all required dependencies. 
+```sh
+cd mobile-app
+```
+
 First you need to install Nodejs and npm, this is different depending on the OS you are running so it is easier to check the node [page](https://nodejs.org/en/download/)
 
 Install [expo](https://expo.io/learn), if it fails run you might need to run this with sudo
@@ -51,6 +56,10 @@ npm install
 
 ## 📱 Usage
 
+Navigate to the mobile-app folder in the project directory 
+```sh
+cd mobile-app
+```
 To Start expo all you have to do is run this line
 ```sh
 npx expo start --go
