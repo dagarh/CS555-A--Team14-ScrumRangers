@@ -6,7 +6,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { addDoc, collection, onSnapshot } from "firebase/firestore";
 import { db, storage } from "../firebaseConfig";
 import { Video } from "expo-av";
-
+import { Alert } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
 function Tourist({ navigation }) {
@@ -35,11 +35,62 @@ function Tourist({ navigation }) {
       quality: 1,
     });
 
-    if (!result.canceled) {
+    if (result && !result.canceled) {
+      const videoInfo = await Video.getAssetInfoAsync(result.uri);
+    
+    // Check if the duration is less than or equal to 30 seconds (30000 milliseconds)
+    if (videoInfo.duration <= 30000) {
+      setVideo(result.uri);
+      await uploadVideo(result.uri);
+    } else {
+      // Alert the user if the video is too long
+      alert("Please select a video that is less than 30 seconds.");
+    }
+    }
+  }
+
+  async function recordVideo() {
+    Alert.alert(
+      "Select Video",
+      "Would you like to record a new video or choose from the gallery?",
+      [
+        {
+          text: "Record",
+          onPress: () => captureVideo(),
+        },
+        {
+          text: "Pick from Gallery",
+          onPress: () => pickVideo(),
+        },
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+      ]
+    );
+  }
+
+  async function captureVideo() {
+    // Ensure that camera permissions are granted
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    if (permissionResult.granted === false) {
+      alert("You've refused to allow this app to access your camera!");
+      return;
+    }
+  
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+      allowsEditing: true, 
+      quality: 1,
+      videoMaxDuration: 30,
+    });
+  
+    if (result && !result.canceled) {
       setVideo(result.assets[0].uri);
       await uploadVideo(result.assets[0].uri);
     }
   }
+  
 
   async function uploadVideo(uri) {
     const response = await fetch(uri);
@@ -142,7 +193,7 @@ function Tourist({ navigation }) {
         )}
       />
       <TouchableOpacity
-        onPress={pickVideo}
+        onPress={recordVideo}
         style={{
           position: "absolute",
           bottom: 50,
