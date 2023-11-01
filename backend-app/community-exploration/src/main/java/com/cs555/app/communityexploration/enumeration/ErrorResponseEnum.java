@@ -7,7 +7,11 @@ package com.cs555.app.communityexploration.enumeration;
 public enum ErrorResponseEnum {
 	
 	NO_VIDEO_FOUND("NO_VIDEO_FOUND", "Video is not found!!!"),
-	DATABASE_ISSUE_FOUND("DATABASE_ISSUE_FOUND", "Database issue is found");
+	DATABASE_ISSUE_FOUND("DATABASE_ISSUE_FOUND", "Database issue is found"),
+	MISSING_VIDEO_URL("MISSING_VIDEO_URL", "Video Url is missing"),
+	MISSING_USER_ID("MISSING_USER_ID", "User id can't be zero"),
+	MISSING_LOCATION("MISSING_LOCATION", "Location is missing");
+	
 	
 	private final String responseCode;
 	private final String responseMessage;

@@ -1,6 +1,7 @@
 package com.cs555.app.communityexploration.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -8,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.cs555.app.communityexploration.contract.request.PostVideoRequest;
 import com.cs555.app.communityexploration.contract.response.GetVideoResponseDTO;
 import com.cs555.app.communityexploration.contract.response.GetVideosResponseDTO;
+import com.cs555.app.communityexploration.contract.response.PostVideoResponseDTO;
 import com.cs555.app.communityexploration.contract.response.base.ErrorDTO;
 import com.cs555.app.communityexploration.entity.Video;
 import com.cs555.app.communityexploration.enumeration.ErrorResponseEnum;
@@ -74,6 +77,24 @@ public class CommunityExplorationServiceImpl implements CommunityExplorationServ
 		}
 		
 		return videosResponseDTO;
+	}
+	
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public PostVideoResponseDTO postVideo(PostVideoRequest postVideoRequest, List<ErrorDTO> errorList) {
+		
+		PostVideoResponseDTO postVideoResponseDTO = new PostVideoResponseDTO();
+		
+		Video video = new Video();
+		video.setUserId(postVideoRequest.getUserId());
+		video.setLocation(postVideoRequest.getLocation());
+		video.setDescription(postVideoRequest.getDescription());
+		video.setVideoUrl(postVideoRequest.getVideoUrl());
+		video.setPostedAt(new Date());
+		video = videoRepository.save(video);
+		
+		postVideoResponseDTO.setVideoId(video.getVideoId());
+		return postVideoResponseDTO;
 	}
 	
 }

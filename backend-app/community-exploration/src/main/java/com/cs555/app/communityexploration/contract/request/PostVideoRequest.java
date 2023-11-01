@@ -16,6 +16,7 @@ public class PostVideoRequest {
 	private String description;
 	
 	private String videoUrl;
+	
 
 	/**
 	 * @return the userId

@@ -40,13 +40,30 @@ public class Video {
 	@Column(name = "Likes")
 	private int likes;
 	
+	// Default constructor
+	public Video() {}
+	
+	/**
+	 * @param userId
+	 * @param location
+	 * @param description
+	 * @param videoUrl
+	 * @param postedAt
+	 * @param likes
+	 */
+	public Video(int userId, String location, String videoUrl) {
+		super();
+		this.userId = userId;
+		this.location = location;
+		this.videoUrl = videoUrl;
+	}
+	
 	/**
 	 * @param videoId
 	 * @param userId
 	 * @param location
 	 * @param description
 	 * @param videoUrl
-	 * @param postedAt
 	 * @param likes
 	 */
 	public Video(int videoId, int userId, String location, String description, String videoUrl,
