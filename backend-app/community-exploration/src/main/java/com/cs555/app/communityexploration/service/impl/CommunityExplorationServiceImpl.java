@@ -37,6 +37,27 @@ public class CommunityExplorationServiceImpl implements CommunityExplorationServ
 	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
+	public PostVideoResponseDTO postVideo(PostVideoRequest postVideoRequest, List<ErrorDTO> errorList) {
+		
+		PostVideoResponseDTO postVideoResponseDTO = new PostVideoResponseDTO();
+				
+		Video video = new Video();
+		video.setUserId(postVideoRequest.getUserId());
+		video.setLocation(postVideoRequest.getLocation());
+		video.setDescription(postVideoRequest.getDescription());
+		video.setVideoUrl(postVideoRequest.getVideoUrl());
+		video.setPostedAt(new Date());
+		video = videoRepository.save(video);
+		videoRepository.flush();
+		entityManager.clear();
+		
+		postVideoResponseDTO.setVideoId(video.getVideoId());
+		
+		return postVideoResponseDTO;
+	}
+	
+	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public GetVideosResponseDTO fetchVideos(String locName, List<ErrorDTO> errorList) {
 		
 		List<Video> videoList = new ArrayList<>();
@@ -83,27 +104,6 @@ public class CommunityExplorationServiceImpl implements CommunityExplorationServ
 		}
 		
 		return videosResponseDTO;
-	}
-	
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public PostVideoResponseDTO postVideo(PostVideoRequest postVideoRequest, List<ErrorDTO> errorList) {
-		
-		PostVideoResponseDTO postVideoResponseDTO = new PostVideoResponseDTO();
-				
-		Video video = new Video();
-		video.setUserId(postVideoRequest.getUserId());
-		video.setLocation(postVideoRequest.getLocation());
-		video.setDescription(postVideoRequest.getDescription());
-		video.setVideoUrl(postVideoRequest.getVideoUrl());
-		video.setPostedAt(new Date());
-		video = videoRepository.save(video);
-		videoRepository.flush();
-		entityManager.clear();
-		
-		postVideoResponseDTO.setVideoId(video.getVideoId());
-		
-		return postVideoResponseDTO;
 	}
 	
 }
