@@ -63,3 +63,14 @@ To Start expo all you have to do is run this line
 ```sh
 npx expo start --go
 ```
+Download and install the Expo Go app from the Apple App Store or Google Play Store on your mobile device.
+
+Your computer and mobile device should be on the same Wi-Fi network for seamless connectivity.
+
+Once the Metro Bundler is running and displaying a QR code:
+
+iOS Users: Open the camera app, point it at the QR code, and click on the notification prompt to open the app in Expo Go.
+
+Android Users: Open the Expo Go app and use the "Scan QR Code" option to scan the QR code.
+
+After scanning, the app will begin building and then load on your mobile device. The initial build may take some time depending on the size of the project and your network speed.
