@@ -19,12 +19,18 @@ import com.cs555.app.communityexploration.enumeration.ErrorResponseEnum;
 import com.cs555.app.communityexploration.repository.VideoRepository;
 import com.cs555.app.communityexploration.service.CommunityExplorationService;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 /**
  * @author Himanshu Dagar 
  */
 
 @Service
 public class CommunityExplorationServiceImpl implements CommunityExplorationService {
+	
+	@PersistenceContext
+    private EntityManager entityManager;
 	
 	@Autowired
 	private VideoRepository videoRepository;
@@ -84,7 +90,7 @@ public class CommunityExplorationServiceImpl implements CommunityExplorationServ
 	public PostVideoResponseDTO postVideo(PostVideoRequest postVideoRequest, List<ErrorDTO> errorList) {
 		
 		PostVideoResponseDTO postVideoResponseDTO = new PostVideoResponseDTO();
-		
+				
 		Video video = new Video();
 		video.setUserId(postVideoRequest.getUserId());
 		video.setLocation(postVideoRequest.getLocation());
@@ -92,8 +98,11 @@ public class CommunityExplorationServiceImpl implements CommunityExplorationServ
 		video.setVideoUrl(postVideoRequest.getVideoUrl());
 		video.setPostedAt(new Date());
 		video = videoRepository.save(video);
+		videoRepository.flush();
+		entityManager.clear();
 		
 		postVideoResponseDTO.setVideoId(video.getVideoId());
+		
 		return postVideoResponseDTO;
 	}
 	
