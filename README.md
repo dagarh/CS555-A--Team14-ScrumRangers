@@ -55,7 +55,6 @@ npm install -g npm@10.2.0
 ```
 
 ## 📱 Usage
-
 Navigate to the mobile-app folder in the project directory 
 ```sh
 cd mobile-app
