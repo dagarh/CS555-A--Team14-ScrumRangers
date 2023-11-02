@@ -70,6 +70,35 @@ function Tourist({ navigation }) {
     );
   }
 
+  async function reportVideo() {
+    Alert.alert(
+      "Select Report Reason",
+      "",
+      [
+        {
+          text: "Nudity/Pornography",
+          style: "cancel",
+        },
+        {
+          text: "Inappropriate Content",
+          style: "cancel",
+        },
+        {
+          text: "Broken/Not Working",
+          style: "cancel",
+        },
+        {
+          text: "Hate Topics/Violence",
+          style: "cancel",
+        },
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+      ]
+    );
+}
+
   async function captureVideo() {
     // Ensure that camera permissions are granted
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
@@ -157,7 +186,7 @@ function Tourist({ navigation }) {
               source={{ uri: item.url }}
               rate={1.0}
               volume={1.0}
-              isMuted={false}
+              isMuted={true}
               resizeMode="cover"
               shouldPlay
               useNativeControls
@@ -180,7 +209,7 @@ function Tourist({ navigation }) {
                 name={item.reported ? "alert-circle" : "alert-circle-outline"}
                 size={30}
                 color={item.reported ? "black" : "black"}
-                onPress={() => handleReport(item.id)}
+                onPress={reportVideo}
               />
               <Ionicons
                 name={item.bookmarked ? "bookmark" : "bookmark-outline"}
