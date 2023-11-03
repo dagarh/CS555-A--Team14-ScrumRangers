@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
   arrow: {
       position: 'absolute',
       top: 10,
-      left: 350,
+      left: 390,
   }
 });
 

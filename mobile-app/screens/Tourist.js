@@ -100,7 +100,6 @@ function Tourist({ navigation }) {
 }
 
   async function captureVideo() {
-    // Ensure that camera permissions are granted
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
     if (permissionResult.granted === false) {
       alert("You've refused to allow this app to access your camera!");
@@ -180,8 +179,11 @@ function Tourist({ navigation }) {
       <FlatList
         data={files}
         keyExtractor={(item) => item.id}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
-          <View style={{ marginBottom: 20 }}>
+          <View style={styles.videoContainer}>
             <Video
               source={{ uri: item.url }}
               rate={1.0}
@@ -189,29 +191,31 @@ function Tourist({ navigation }) {
               isMuted={true}
               resizeMode="cover"
               shouldPlay
-              useNativeControls
-              style={{ width, height: height / 3 }}
+              isLooping
+              useNativeControls={false}
+              style={StyleSheet.absoluteFill}
             />
+            
             <View style={styles.iconContainer}>
-              <Ionicons
+              <Ionicons style={styles.iconindividual}
                 name={item.liked ? "heart" : "heart-outline"}
                 size={30}
                 color={item.liked ? "red" : "black"}
                 onPress={() => handleLike(item.id)}
               />
-              <Ionicons
+              <Ionicons style={styles.iconindividual}
                 name="chatbubble-outline"
                 size={30}
                 color="black"
                 onPress={handleComment}
               />
-              <Ionicons
+              <Ionicons style={styles.iconindividual}
                 name={item.reported ? "alert-circle" : "alert-circle-outline"}
                 size={30}
                 color={item.reported ? "black" : "black"}
                 onPress={reportVideo}
               />
-              <Ionicons
+              <Ionicons style={styles.iconindividual}
                 name={item.bookmarked ? "bookmark" : "bookmark-outline"}
                 size={30}
                 color={item.bookmarked ? "black" : "black"}
@@ -225,8 +229,8 @@ function Tourist({ navigation }) {
         onPress={recordVideo}
         style={{
           position: "absolute",
-          bottom: 50,
-          right: 30,
+          bottom: 24,
+          left: 24,
           width: 60,
           height: 60,
           backgroundColor: "black",
@@ -237,17 +241,25 @@ function Tourist({ navigation }) {
       >
         <Ionicons name="videocam" size={30} color="white" />
       </TouchableOpacity>
+      
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   iconContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
     padding: 10,
-    backgroundColor: "#FFF"
   },
+  videoContainer: {
+    width: width,
+    height: height
+  },
+  iconindividual: {
+    paddingTop:30,
+  },
+
 });
 
 export default Tourist;
