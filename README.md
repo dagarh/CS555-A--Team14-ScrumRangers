@@ -41,6 +41,7 @@ Navigate to the mobile-app folder in the project directory to install all requir
 ```sh
 cd mobile-app
 ```
+For MAC OS
 Please remove existing node modules using below commands 
 ```sh
 rm -rf node_modules/
@@ -55,6 +56,25 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 nvm install 18.17.0
 
 npm install -g npm@10.2.0
+```
+For Windows
+Please remove existing node modules using below commands
+```sh
+npm install -g rimraf
+rimraf node_modules
+del package-lock.json
+npm uninstall -g yarn
+```
+Please clean npm cache
+```sh
+npm cache clean --force
+
+```
+Install needed npm packages
+```sh
+npm install
+npm install -g npm@10.2.0
+
 ```
 
 To install the expo
