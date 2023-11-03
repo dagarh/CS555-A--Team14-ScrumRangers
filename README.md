@@ -42,6 +42,7 @@ Navigate to the mobile-app folder in the project directory to install all requir
 cd mobile-app
 ```
 For MAC OS
+
 Please remove existing node modules using below commands 
 ```sh
 rm -rf node_modules/
@@ -58,6 +59,7 @@ nvm install 18.17.0
 npm install -g npm@10.2.0
 ```
 For Windows
+
 Please remove existing node modules using below commands
 ```sh
 npm install -g rimraf
