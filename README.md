@@ -48,6 +48,20 @@ rm -rf node_modules/
 rm package-lock.json
 ```
 
+Install the needed packages while in the root folder of the project
+```sh
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+
+nvm install 18.17.0
+
+npm install -g npm@10.2.0
+```
+
+To install the expo
+```sh
+npm install expo
+```
+
 First you need to install Nodejs and npm, this is different depending on the OS you are running so it is easier to check the node [page](https://nodejs.org/en/download/)
 
 Install [expo](https://expo.io/learn), if it fails run you might need to run this with sudo
@@ -55,21 +69,10 @@ Install [expo](https://expo.io/learn), if it fails run you might need to run thi
 npm install expo-cli --global
 ```
 
-Install the needed packages while in the root folder of the project
-```sh
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-nvm install 18.17.0
-npm install -g npm@10.2.0
-```
-
 ## 📱 Usage
 Navigate to the mobile-app folder in the project directory 
 ```sh
 cd mobile-app
-```
-To install the expo
-```sh
-npm install expo
 ```
 
 To Start expo all you have to do is run this line
