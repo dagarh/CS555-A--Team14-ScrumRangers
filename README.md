@@ -41,7 +41,7 @@ Navigate to the mobile-app folder in the project directory to install all requir
 ```sh
 cd mobile-app
 ```
-For MAC OS
+**For MAC OS**
 
 Please remove existing node modules using below commands 
 ```sh
@@ -58,7 +58,7 @@ nvm install 18.17.0
 
 npm install -g npm@10.2.0
 ```
-For Windows
+**For Windows**
 
 Please remove existing node modules using below commands
 ```sh
@@ -78,6 +78,7 @@ npm install
 npm install -g npm@10.2.0
 
 ```
+**Common to both OS:**
 
 To install the expo
 ```sh
