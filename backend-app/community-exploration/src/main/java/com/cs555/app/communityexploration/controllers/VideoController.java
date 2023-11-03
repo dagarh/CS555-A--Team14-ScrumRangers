@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cs555.app.communityexploration.constant.CommunityExplorationConstant;
 import com.cs555.app.communityexploration.constant.UrlConstants;
 import com.cs555.app.communityexploration.contract.request.PostVideoRequest;
+import com.cs555.app.communityexploration.contract.request.VideoLikeRequest;
 import com.cs555.app.communityexploration.contract.response.GetVideosResponseDTO;
 import com.cs555.app.communityexploration.contract.response.PostVideoResponseDTO;
 import com.cs555.app.communityexploration.contract.response.base.ErrorDTO;
@@ -92,6 +93,43 @@ public class VideoController {
 
 			if (CollectionUtils.isEmpty(errorList)) {
 				responseBody.setData(videosResponse);
+			} else {
+				responseBody.setError(errorList);
+			}
+
+			responseBody.setStatus(CommunityExplorationConstant.SUCCESS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			responseBody.setStatus(CommunityExplorationConstant.FAILURE);
+
+			// message is being sent only during exception
+			responseBody.setMessage(e.getMessage());
+		}
+
+		return responseBody;
+	}
+	
+	@CrossOrigin
+	@ApiOperation(value = "Add like on a Video", notes = "Add like on a Video", response = ResponseDTO.class)
+	@PostMapping(value = UrlConstants.LIKE_VIDEO_URL, produces = "application/json")
+	public ResponseDTO<?> postLikeOnVideo(@RequestBody VideoLikeRequest videoLikeRequest) {
+		ResponseDTO<?> responseBody = new ResponseDTO<>();
+
+		List<ErrorDTO> errorList = new ArrayList<>();
+		// RequestValidator.validatePostVideoRequest(postVideoRequest, errorList);
+
+		try {
+			if (CollectionUtils.isEmpty(errorList)) {
+				// All request validations passed successfully 
+				// PostVideoResponseDTO postVideoResponseDTO = communityExplorationService.postVideo(postVideoRequest, errorList);
+
+				
+				if(CollectionUtils.isNotEmpty(errorList)) {
+					responseBody.setError(errorList);
+				} else {
+					// All business validations passed successfully
+					// responseBody.setData(postVideoResponseDTO);
+				}
 			} else {
 				responseBody.setError(errorList);
 			}
