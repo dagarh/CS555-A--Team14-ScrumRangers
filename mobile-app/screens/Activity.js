@@ -1,3 +1,4 @@
+//Events page
 import React, { useState } from 'react';
 import { View,TextInput,FlatList, StyleSheet,ImageBackground,Pressable,ScrollView } from 'react-native';
 import { Card, Title,Text } from 'react-native-paper';
