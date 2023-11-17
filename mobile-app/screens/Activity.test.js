@@ -1,4 +1,3 @@
-//Test Activity.js
 import React from 'react';
 import {render} from '@testing-library/react-native';
 import Activity from './Activity';
