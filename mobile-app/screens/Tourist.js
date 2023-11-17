@@ -1,28 +1,41 @@
-import React, { useEffect, useState } from "react";
-import { View, TouchableOpacity, FlatList, Dimensions, StyleSheet } from "react-native";
+import React, { useEffect, useState, useRef } from 'react';
+import {
+  View,
+  TouchableOpacity,
+  FlatList,
+  Dimensions,
+  StyleSheet,
+  Alert,
+  Text,
+} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import * as ImagePicker from "expo-image-picker";
+import * as ImagePicker from 'expo-image-picker';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
-import { db, storage } from "../firebaseConfig";
-import { Video } from "expo-av";
-import { Alert } from 'react-native';
+import { addDoc, collection, onSnapshot } from 'firebase/firestore';
+import { db, storage } from '../firebaseConfig';
+import { Video } from 'expo-av';
+
 const { width, height } = Dimensions.get('window');
 
 function Tourist({ navigation }) {
-  const [video, setVideo] = useState("");
+  const [video, setVideo] = useState('');
   const [progress, setProgress] = useState(0);
   const [files, setFiles] = useState([]);
+  const [location, setLocation] = useState('');
+  const [description, setDescription] = useState('');
+  const videoRef = useRef(null);
+  const [dialogVisible, setDialogVisible] = useState(false);
+  const [userInput, setUserInput] = useState('');
+
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "files"), (snapshot) => {
-      const newFiles = snapshot.docs.map(doc => ({
-        id: doc.id,
-        liked: false,
-        reported: false,
-        bookmarked: false,
-        ...doc.data()
-      })).filter(file => file.fileType === "video");
+    const unsubscribe = onSnapshot(collection(db, 'files'), (snapshot) => {
+      const newFiles = snapshot.docs
+        .map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        .filter((file) => file.fileType === 'video');
       setFiles(newFiles);
     });
 
@@ -30,24 +43,88 @@ function Tourist({ navigation }) {
   }, []);
 
   async function pickVideo() {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-      quality: 1,
-    });
-
-    if (result && !result.canceled) {
-      const videoInfo = await Video.getAssetInfoAsync(result.uri);
-    
-    // Check if the duration is less than or equal to 30 seconds (30000 milliseconds)
-    if (videoInfo.duration <= 30000) {
-      setVideo(result.uri);
-      await uploadVideo(result.uri);
-    } else {
-      // Alert the user if the video is too long
-      alert("Please select a video that is less than 30 seconds.");
-    }
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+        quality: 1,
+      });
+  
+      if (!result.canceled && result.assets) {
+        const videoUri = result.assets[0].uri;
+        setVideo(videoUri);
+  
+        // Prompt for location input
+        const locationInput = await new Promise((resolve) => {
+          Alert.prompt(
+            "Enter Location",
+            "",
+            [
+              {
+                text: "Cancel",
+                onPress: () => resolve(null),
+                style: "cancel"
+              },
+              {
+                text: "OK",
+                onPress: (text) => resolve(text)
+              }
+            ],
+            "plain-text"
+          );
+        });
+  
+        if (locationInput) {
+          setLocation(locationInput);
+        } else {
+          // Handle the case where user does not enter location
+        }
+  
+        // Prompt for description input
+        const descriptionInput = await new Promise((resolve) => {
+          Alert.prompt(
+            "Enter Video Description",
+            "",
+            [
+              {
+                text: "Cancel",
+                onPress: () => resolve(null),
+                style: "cancel"
+              },
+              {
+                text: "OK",
+                onPress: (text) => resolve(text)
+              }
+            ],
+            "plain-text"
+          );
+        });
+  
+        if (descriptionInput) {
+          setDescription(descriptionInput);
+        } else {
+          // Handle the case where user does not enter description
+        }
+  
+        if (videoRef.current) {
+          const status = await videoRef.current.getStatusAsync();
+  
+          if (status.durationMillis <= 30000) {
+            await uploadVideo(videoUri);
+          } else {
+            Alert.alert('Alert', 'Please select a video that is less than 30 seconds.');
+            setVideo('');
+            setLocation('');
+            setDescription('');
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error picking video:', error);
     }
   }
+  
+  
+  
 
   async function recordVideo() {
     Alert.alert(
@@ -97,30 +174,35 @@ function Tourist({ navigation }) {
         },
       ]
     );
-}
+  }
 
   async function captureVideo() {
+  try {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
     if (permissionResult.granted === false) {
-      alert("You've refused to allow this app to access your camera!");
+      Alert.alert("Camera Permission Denied", "You've refused to allow this app to access your camera!");
       return;
     }
-  
+
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-      allowsEditing: true, 
+      allowsEditing: true,
       quality: 1,
       videoMaxDuration: 30,
     });
-  
-    if (result && !result.canceled) {
+
+    if (!result.canceled) {
       setVideo(result.assets[0].uri);
       await uploadVideo(result.assets[0].uri);
     }
+  } catch (error) {
+    console.error("Error capturing video:", error);
   }
-  
+}
 
-  async function uploadVideo(uri) {
+
+async function uploadVideo(uri) {
+  try {
     const response = await fetch(uri);
     const blob = await response.blob();
     const storageRef = ref(storage, `Videos/${new Date().getTime()}`);
@@ -128,22 +210,27 @@ function Tourist({ navigation }) {
     const uploadTask = uploadBytesResumable(storageRef, blob);
 
     uploadTask.on(
-      "state_changed",
+      'state_changed',
       (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setProgress(Math.round(progress));
       },
       (error) => {
-        console.error("Upload error: ", error);
+        console.error('Upload error: ', error);
       },
-      () => {
+      async () => {
         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-          await saveRecord("video", downloadURL, new Date().toISOString());
-          setVideo("");
+          await saveRecord('video', downloadURL, new Date().toISOString(), location, description);
+          setVideo('');
+          setLocation('');
+          setDescription('');
         });
       }
     );
+  } catch (error) {
+    console.error('Error uploading video:', error);
   }
+}
 
   async function saveRecord(fileType, url, createdAt) {
     try {
@@ -151,7 +238,13 @@ function Tourist({ navigation }) {
         fileType,
         url,
         createdAt,
+        location,
+        description,
       });
+
+      // Reset location and description after saving
+      setLocation("");
+      setDescription("");
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -195,7 +288,12 @@ function Tourist({ navigation }) {
               useNativeControls={false}
               style={StyleSheet.absoluteFill}
             />
-            
+
+            <View style={styles.videoMetadata}>
+              <Text style={styles.videoLocation}>{item.location}</Text>
+              <Text style={styles.videoDescription}>{item.description}</Text>
+            </View>
+
             <View style={styles.iconContainer}>
               <Ionicons style={styles.iconindividual}
                 name={item.liked ? "heart" : "heart-outline"}
@@ -241,7 +339,7 @@ function Tourist({ navigation }) {
       >
         <Ionicons name="videocam" size={30} color="white" />
       </TouchableOpacity>
-      
+
     </View>
   );
 }
@@ -257,9 +355,23 @@ const styles = StyleSheet.create({
     height: height
   },
   iconindividual: {
-    paddingTop:30,
+    paddingTop: 30,
   },
-
+  videoMetadata: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+    right: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)', // Use a semi-transparent black background
+  },
+  videoLocation: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  videoDescription: {
+    color: 'white',
+    marginTop: 4, // If you want some space between the location and description
+  },
 });
 
 export default Tourist;
