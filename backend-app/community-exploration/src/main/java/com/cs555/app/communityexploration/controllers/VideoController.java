@@ -41,50 +41,11 @@ public class VideoController {
 	CommunityExplorationService communityExplorationService;
 
 	@CrossOrigin
-	@ApiOperation(value = "Post video for any location", notes = "Save the video url in DB", response = ResponseDTO.class)
-	@PostMapping(value = UrlConstants.POST_VIDEO_URL, produces = "application/json")
-	public ResponseDTO<PostVideoResponseDTO> postVideo(@RequestBody PostVideoRequest postVideoRequest) {
-		ResponseDTO<PostVideoResponseDTO> responseBody = new ResponseDTO<>();
-
-		List<ErrorDTO> errorList = new ArrayList<>();
-		RequestValidator.validatePostVideoRequest(postVideoRequest, errorList);
-
-		try {
-			if (CollectionUtils.isEmpty(errorList)) {
-				// All request validations passed successfully
-				PostVideoResponseDTO postVideoResponseDTO = communityExplorationService.postVideo(postVideoRequest, errorList);
-
-
-				if(CollectionUtils.isNotEmpty(errorList)) {
-					responseBody.setError(errorList);
-				} else {
-					// All business validations passed successfully
-					responseBody.setData(postVideoResponseDTO);
-				}
-			} else {
-				responseBody.setError(errorList);
-			}
-
-			responseBody.setStatus(CommunityExplorationConstant.SUCCESS);
-		} catch (Exception e) {
-			e.printStackTrace();
-			responseBody.setStatus(CommunityExplorationConstant.FAILURE);
-
-			// message is being sent only during exception
-			responseBody.setMessage(e.getMessage());
-		}
-
-		return responseBody;
-	}
-
-
-	@CrossOrigin
 	@ApiOperation(value = "Get videos for all locations", notes = "Provide all the Videos", response = ResponseDTO.class)
 	@GetMapping(value = UrlConstants.DEFAULT_VIDEO_URL, produces = "application/json")
 	public ResponseDTO<GetVideosResponseDTO> getVideosForAllLocations() {
 
 		ResponseDTO<GetVideosResponseDTO> responseBody = new ResponseDTO<>();
-
 		List<ErrorDTO> errorList = new ArrayList<>();
 
 		try {
@@ -110,11 +71,42 @@ public class VideoController {
 	}
 
 	@CrossOrigin
+	@ApiOperation(value = "Get videos based on the location", notes = "Provide the Videos based on the location, if it exists in the database", response = ResponseDTO.class)
+	@GetMapping(value = {UrlConstants.VIDEO_URL}, produces = "application/json")
+	public ResponseDTO<GetVideosResponseDTO> getVideosBasedOnLoc(
+			@ApiParam(value = "locationName for which videos need to be retrieved", required = true) @PathVariable("locName") String locName) {
+
+		ResponseDTO<GetVideosResponseDTO> responseBody = new ResponseDTO<>();
+		List<ErrorDTO> errorList = new ArrayList<>();
+
+		try {
+
+			GetVideosResponseDTO videosResponse = communityExplorationService.fetchVideos(locName, errorList);
+
+			if (CollectionUtils.isEmpty(errorList)) {
+				responseBody.setData(videosResponse);
+			} else {
+				responseBody.setError(errorList);
+			}
+
+			responseBody.setStatus(CommunityExplorationConstant.SUCCESS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			responseBody.setStatus(CommunityExplorationConstant.FAILURE);
+
+			// message is being sent only during exception
+			responseBody.setMessage(e.getMessage());
+		}
+
+		return responseBody;
+	}
+
+	@CrossOrigin
 	@ApiOperation(value = "Add like on a Video", notes = "Add like on a Video", response = ResponseDTO.class)
 	@PostMapping(value = UrlConstants.LIKE_VIDEO_URL, produces = "application/json")
 	public ResponseDTO<?> postLikeOnVideo(@RequestBody VideoLikeRequest videoLikeRequest) {
-		ResponseDTO<?> responseBody = new ResponseDTO<>();
 
+		ResponseDTO<?> responseBody = new ResponseDTO<>();
 		List<ErrorDTO> errorList = new ArrayList<>();
 		// RequestValidator.validatePostVideoRequest(postVideoRequest, errorList);
 
@@ -147,21 +139,26 @@ public class VideoController {
 	}
 
 	@CrossOrigin
-	@ApiOperation(value = "Get videos based on the location", notes = "Provide the Videos based on the location, if it exists in the database", response = ResponseDTO.class)
-	@GetMapping(value = {UrlConstants.VIDEO_URL}, produces = "application/json")
-	public ResponseDTO<GetVideosResponseDTO> getVideosBasedOnLoc(
-			@ApiParam(value = "locationName for which videos need to be retrieved", required = true) @PathVariable("locName") String locName) {
+	@ApiOperation(value = "Post video for any location", notes = "Save the video url in DB", response = ResponseDTO.class)
+	@PostMapping(value = UrlConstants.POST_VIDEO_URL, produces = "application/json")
+	public ResponseDTO<PostVideoResponseDTO> postVideo(@RequestBody PostVideoRequest postVideoRequest) {
 
-		ResponseDTO<GetVideosResponseDTO> responseBody = new ResponseDTO<>();
-
+		ResponseDTO<PostVideoResponseDTO> responseBody = new ResponseDTO<>();
 		List<ErrorDTO> errorList = new ArrayList<>();
+		RequestValidator.validatePostVideoRequest(postVideoRequest, errorList);
 
 		try {
-
-			GetVideosResponseDTO videosResponse = communityExplorationService.fetchVideos(locName, errorList);
-
 			if (CollectionUtils.isEmpty(errorList)) {
-				responseBody.setData(videosResponse);
+				// All request validations passed successfully
+				PostVideoResponseDTO postVideoResponseDTO = communityExplorationService.postVideo(postVideoRequest, errorList);
+
+
+				if(CollectionUtils.isNotEmpty(errorList)) {
+					responseBody.setError(errorList);
+				} else {
+					// All business validations passed successfully
+					responseBody.setData(postVideoResponseDTO);
+				}
 			} else {
 				responseBody.setError(errorList);
 			}
@@ -177,4 +174,5 @@ public class VideoController {
 
 		return responseBody;
 	}
+
 }
