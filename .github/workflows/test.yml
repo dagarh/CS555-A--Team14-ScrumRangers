@@ -14,7 +14,7 @@ jobs:
         working-directory: mobile-app
 
     steps:
-      - uses: actions/checkout@v2.311.0
+      - uses: actions/checkout@v2
 
       - uses: dorny/paths-filter@v2
         id: filter
