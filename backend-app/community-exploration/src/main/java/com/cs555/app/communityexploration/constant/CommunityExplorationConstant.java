@@ -5,8 +5,8 @@ package com.cs555.app.communityexploration.constant;
  *
  */
 public class CommunityExplorationConstant implements UrlConstants {
-	
+
 	public static final String SUCCESS = "success";
 	public static final String FAILURE = "failure";
-	
+
 }

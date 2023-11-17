@@ -36,10 +36,10 @@ import io.swagger.annotations.ApiParam;
 @RestController
 @RequestMapping(UrlConstants.CONTROLLER_URL)
 public class VideoController {
-	
+
 	@Autowired
 	CommunityExplorationService communityExplorationService;
-	
+
 	@CrossOrigin
 	@ApiOperation(value = "Post video for any location", notes = "Save the video url in DB", response = ResponseDTO.class)
 	@PostMapping(value = UrlConstants.POST_VIDEO_URL, produces = "application/json")
@@ -51,10 +51,10 @@ public class VideoController {
 
 		try {
 			if (CollectionUtils.isEmpty(errorList)) {
-				// All request validations passed successfully 
+				// All request validations passed successfully
 				PostVideoResponseDTO postVideoResponseDTO = communityExplorationService.postVideo(postVideoRequest, errorList);
 
-				
+
 				if(CollectionUtils.isNotEmpty(errorList)) {
 					responseBody.setError(errorList);
 				} else {
@@ -76,8 +76,8 @@ public class VideoController {
 
 		return responseBody;
 	}
-	
-	
+
+
 	@CrossOrigin
 	@ApiOperation(value = "Get videos for all locations", notes = "Provide all the Videos", response = ResponseDTO.class)
 	@GetMapping(value = UrlConstants.DEFAULT_VIDEO_URL, produces = "application/json")
@@ -108,7 +108,7 @@ public class VideoController {
 
 		return responseBody;
 	}
-	
+
 	@CrossOrigin
 	@ApiOperation(value = "Add like on a Video", notes = "Add like on a Video", response = ResponseDTO.class)
 	@PostMapping(value = UrlConstants.LIKE_VIDEO_URL, produces = "application/json")
@@ -120,10 +120,10 @@ public class VideoController {
 
 		try {
 			if (CollectionUtils.isEmpty(errorList)) {
-				// All request validations passed successfully 
+				// All request validations passed successfully
 				// PostVideoResponseDTO postVideoResponseDTO = communityExplorationService.postVideo(postVideoRequest, errorList);
 
-				
+
 				if(CollectionUtils.isNotEmpty(errorList)) {
 					responseBody.setError(errorList);
 				} else {
@@ -145,7 +145,7 @@ public class VideoController {
 
 		return responseBody;
 	}
-	
+
 	@CrossOrigin
 	@ApiOperation(value = "Get videos based on the location", notes = "Provide the Videos based on the location, if it exists in the database", response = ResponseDTO.class)
 	@GetMapping(value = {UrlConstants.VIDEO_URL}, produces = "application/json")

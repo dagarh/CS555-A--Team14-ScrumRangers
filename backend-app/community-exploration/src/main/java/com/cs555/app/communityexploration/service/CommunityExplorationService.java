@@ -12,17 +12,17 @@ import com.cs555.app.communityexploration.contract.response.base.ErrorDTO;
  *
  */
 public interface CommunityExplorationService {
-	
+
 	/**
-	 * 
+	 *
 	 * @param locName
 	 * @param errorList
 	 * @return
 	 */
 	GetVideosResponseDTO fetchVideos(String locName, List<ErrorDTO> errorList);
-	
+
 	/**
-	 * 
+	 *
 	 * @param postVideoRequest
 	 * @param errorList
 	 * @return

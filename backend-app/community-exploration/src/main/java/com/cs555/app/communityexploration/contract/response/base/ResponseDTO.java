@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  */
 @JsonInclude(Include.NON_NULL)
 public class ResponseDTO<T> extends BaseResponse {
-	
+
 	private T data;
 	private String message;
 	/**
@@ -36,7 +36,7 @@ public class ResponseDTO<T> extends BaseResponse {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "ResponseDTO [data=" + data + ", message=" + message + "]";

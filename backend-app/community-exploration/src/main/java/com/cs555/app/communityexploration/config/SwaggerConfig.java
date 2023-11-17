@@ -25,7 +25,7 @@ public class SwaggerConfig {
 				.apis(RequestHandlerSelectors.basePackage("com.cs555.app.communityexploration"))
 				.paths(PathSelectors.any()).build().apiInfo(metaData());
 	}
-	
+
 	private ApiInfo metaData() {
 		return new ApiInfoBuilder()
 				.title("CS555-Server")

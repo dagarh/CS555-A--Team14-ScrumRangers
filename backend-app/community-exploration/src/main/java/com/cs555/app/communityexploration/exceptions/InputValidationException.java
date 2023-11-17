@@ -13,7 +13,7 @@ public class InputValidationException extends Exception {
 	private static final long serialVersionUID = -6197992395827381291L;
 
 	private List<ErrorDTO> errors;
-	
+
 	public InputValidationException() {
 	}
 
@@ -38,7 +38,7 @@ public class InputValidationException extends Exception {
 	public InputValidationException(String message, Throwable cause) {
 		super(message, cause);
 	}
-	
+
 	public InputValidationException(List<ErrorDTO> errors) {
 		super();
 		this.errors = errors;

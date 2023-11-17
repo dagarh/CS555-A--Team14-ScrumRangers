@@ -9,14 +9,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PostVideoRequest {
-	
+
 	private int userId;
-	
+
 	private String location;
 	private String description;
-	
+
 	private String videoUrl;
-	
+
 
 	/**
 	 * @return the userId
@@ -78,6 +78,6 @@ public class PostVideoRequest {
 	public String toString() {
 		return "PostVideoRequest [userId=" + userId + ", location=" + location + ", description=" + description
 				+ ", videoUrl=" + videoUrl + "]";
-	}	
-	
+	}
+
 }

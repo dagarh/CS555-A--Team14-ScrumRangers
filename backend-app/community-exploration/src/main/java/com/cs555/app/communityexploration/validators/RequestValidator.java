@@ -14,9 +14,9 @@ import com.cs555.app.communityexploration.enumeration.ErrorResponseEnum;
  *
  */
 public class RequestValidator {
-	
+
 	public static List<ErrorDTO> validatePostVideoRequest(PostVideoRequest postVideoRequest, List<ErrorDTO> errorList) {
-				
+
 		if (StringUtils.isEmpty(postVideoRequest.getVideoUrl())) {
 			errorList.add(new ErrorDTO(ErrorResponseEnum.MISSING_VIDEO_URL, null));
 		} else if (postVideoRequest.getUserId() == 0) {
@@ -25,8 +25,8 @@ public class RequestValidator {
 		} else if(StringUtils.isEmpty(postVideoRequest.getLocation())) {
 			errorList.add(new ErrorDTO(ErrorResponseEnum.MISSING_LOCATION, null));
 		}
-		
+
 		return errorList;
 	}
-	
+
 }

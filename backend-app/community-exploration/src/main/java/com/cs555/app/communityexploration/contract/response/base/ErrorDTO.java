@@ -7,11 +7,11 @@ import com.cs555.app.communityexploration.enumeration.ErrorResponseEnum;
  *
  */
 public class ErrorDTO {
-	
+
 	private String errorCode;
 	private String message;
 	private String attributeCode;
-	
+
 	public ErrorDTO() {
 	}
 
@@ -26,7 +26,7 @@ public class ErrorDTO {
 		this.message = message;
 		this.attributeCode = attributeCode;
 	}
-	
+
 	/**
 	 * @param errorEnum
 	 * @param attributeCode
@@ -79,6 +79,6 @@ public class ErrorDTO {
 	public void setAttributeCode(String attributeCode) {
 		this.attributeCode = attributeCode;
 	}
-	
+
 }
 

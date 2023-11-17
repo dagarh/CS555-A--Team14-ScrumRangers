@@ -13,9 +13,9 @@ import com.cs555.app.communityexploration.entity.Video;
  */
 @Repository
 public interface VideoRepository extends JpaRepository<Video, Integer> {
-	
+
 	@Query("select v from Video v")
 	public List<Video> findAllVideos();
-	
+
 	public List<Video> findByLocation(String location);
 }

@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
 public class PostVideoResponseDTO {
-	
+
 	private int videoId;
 
 	/**
@@ -31,5 +31,5 @@ public class PostVideoResponseDTO {
 	public String toString() {
 		return "PostVideoResponseDTO [videoId=" + videoId + "]";
 	}
-	
+
 }

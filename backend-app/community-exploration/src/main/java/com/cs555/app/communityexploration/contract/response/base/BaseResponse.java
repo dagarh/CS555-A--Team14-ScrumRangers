@@ -11,31 +11,31 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
  */
 @JsonInclude(Include.NON_NULL)
 public class BaseResponse {
-	
+
 	private String status;
 	private List<ErrorDTO> error;
-	
+
 	/**
 	 * @return the status
 	 */
 	public String getStatus() {
 		return status;
 	}
-	
+
 	/**
 	 * @param status the status to set
 	 */
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
 	/**
 	 * @return the error
 	 */
 	public List<ErrorDTO> getError() {
 		return error;
 	}
-	
+
 	/**
 	 * @param error the error to set
 	 */
@@ -47,6 +47,6 @@ public class BaseResponse {
 	public String toString() {
 		return "BaseResponse [status=" + status + ", error=" + error + "]";
 	}
-	
+
 }
 

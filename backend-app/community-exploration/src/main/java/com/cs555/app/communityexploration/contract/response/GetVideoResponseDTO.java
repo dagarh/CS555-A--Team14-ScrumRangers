@@ -4,17 +4,17 @@ package com.cs555.app.communityexploration.contract.response;
  * @author Himanshu Dagar
  */
 public class GetVideoResponseDTO {
-	
+
 	private int videoId;
-	
+
 	private int userId;
-	
+
 	private String location;
-	
+
 	private String description;
-	
+
 	private int likes;
-	
+
 	private String url;
 
 	/**
@@ -106,5 +106,5 @@ public class GetVideoResponseDTO {
 		return "GetVideoResponseDTO [videoId=" + videoId + ", userId=" + userId + ", location=" + location
 				+ ", description=" + description + ", likes=" + likes + ", url=" + url + "]";
 	}
-	
+
 }

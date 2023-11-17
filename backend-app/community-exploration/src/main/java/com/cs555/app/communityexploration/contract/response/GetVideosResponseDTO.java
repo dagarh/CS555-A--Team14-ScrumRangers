@@ -32,5 +32,5 @@ public class GetVideosResponseDTO {
 	public String toString() {
 		return "GetVideosResponseDTO [videos=" + videos + "]";
 	}
-	
+
 }

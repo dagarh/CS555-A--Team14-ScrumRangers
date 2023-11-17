@@ -18,34 +18,34 @@ import jakarta.persistence.TemporalType;
 @Entity
 @Table(name = "Video")
 public class Video {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "VideoId")
 	private int videoId;
-	
+
 	@Column(name = "UserId")
 	private int userId;
-	
+
 	@Column(name = "Location")
 	private String location;
-	
+
 	@Column(name = "Description")
 	private String description;
-	
+
 	@Column(name = "Video_Url")
 	private String videoUrl;
-	
+
 	@Column(name = "PostedAt")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date postedAt;
-	
+
 	@Column(name = "Likes")
 	private int likes;
-	
+
 	// Default constructor
 	public Video() {}
-	
+
 	/**
 	 * @param userId
 	 * @param location
@@ -60,7 +60,7 @@ public class Video {
 		this.location = location;
 		this.videoUrl = videoUrl;
 	}
-	
+
 	/**
 	 * @param videoId
 	 * @param userId
@@ -183,5 +183,5 @@ public class Video {
 		return "Video [videoId=" + videoId + ", userId=" + userId + ", location=" + location + ", description="
 				+ description + ", videoUrl=" + videoUrl + ", postedAt=" + postedAt + ", likes=" + likes + "]";
 	}
-	
+
 }

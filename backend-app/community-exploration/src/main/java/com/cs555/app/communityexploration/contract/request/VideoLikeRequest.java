@@ -8,9 +8,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VideoLikeRequest {
-	
+
 	private int userId;
-	
+
 	/**
 	 * @return the userId
 	 */
@@ -29,5 +29,5 @@ public class VideoLikeRequest {
 	public String toString() {
 		return "VideoLikeRequest [userId=" + userId + "]";
 	}
-	
+
 }
