@@ -1,5 +1,7 @@
 //Events page
 import React, { useState } from 'react';
+
+import {  TouchableOpacity, Linking } from 'react-native';
 import { View,TextInput,FlatList, StyleSheet,ImageBackground,Pressable,ScrollView } from 'react-native';
 import { Card, Title,Text } from 'react-native-paper';
 
@@ -19,18 +21,21 @@ export default function Activity(){
     }
   };
 
-  const renderItem = ({item})=>{
-    return(
+  const renderItem = ({ item }) => {
+    return (
       <Card>
         <Card.Content>
           <Title>{item.name}</Title>
           <Text>Date: {item.dates.start.localDate}</Text>
           <Text>Time: {item.dates.start.localTime}</Text>
-          <Text>URL:{item.url}</Text>
+          {/* Other details */}
+          <TouchableOpacity onPress={() => Linking.openURL(item.url)} style={styles.button}>
+            <Text style={styles.buttonText}>Buy Tickets</Text>
+          </TouchableOpacity>
         </Card.Content>
       </Card>
-      
-    )};
+    );
+  };
 
   return (
     <ImageBackground source={require('../assets/eventbackground.jpg')} style={styles.backgroundImage}>
