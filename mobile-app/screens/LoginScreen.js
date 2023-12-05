@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ImageBackground, StyleSheet } from 'react-native';
+import { View, ImageBackground, StyleSheet , Image} from 'react-native';
 import { useContext, useState } from 'react';
 import { Alert } from 'react-native';
 
@@ -36,6 +36,10 @@ function LoginScreen() {
       source={require('../assets/login.webp')}
       style={styles.backgroundImage}
     >
+      <Image 
+        source={require('../assets/City-black.png')} // Replace with the path to your logo image
+        style={styles.logo}
+      />
       <View style={styles.container}>
         <AuthContent isLogin onAuthenticate={loginHandler}
         />
@@ -55,6 +59,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 
+  },
+  logo: {
+    top:80,
+    width: 190, // Adjust the width as needed
+    height: 190, // Adjust the height as needed
+    alignSelf: 'center', // Center the logo
+    marginTop: 0, // Add some top margin
+    resizeMode: 'contain', // Ensure the image is scaled correctly
   },
 });
 

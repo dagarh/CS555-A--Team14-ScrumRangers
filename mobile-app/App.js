@@ -50,6 +50,14 @@ function AuthenticatedStack() {
         name="Explorer"
         component={WelcomeScreen}
         options={{
+          headerTitle: () => (
+            <Image
+              source={require('./assets/city-white.png')
+} 
+              style={{ width: 150, height: 50 }} 
+              resizeMode="contain"
+            />
+          ),
           headerLeft: ({ tintColor }) => (
             <View style={{ flexDirection: 'row' }}>
               <IconButton
@@ -73,6 +81,7 @@ function AuthenticatedStack() {
     </Stack.Navigator>
   );
 }
+
 
 function Navigation() {
   const authCtx = useContext(AuthContext);
