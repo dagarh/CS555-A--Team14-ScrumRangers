@@ -12,6 +12,7 @@ import profile from './profile';
 import posts from './posts';
 import likes from './likes';
 import ChangePassword from './ChangePassword';
+import SavedPosts from './SavedPosts';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -50,6 +51,7 @@ function WelcomeScreen() {
             <Stack.Screen name="posts" component={posts} />
             <Stack.Screen name="likes" component={likes} />
             <Stack.Screen name="ChangePassword" component={ChangePassword} />
+            <Stack.Screen name="SavedPosts" component={SavedPosts} />
         </Stack.Navigator>
     );
 }
