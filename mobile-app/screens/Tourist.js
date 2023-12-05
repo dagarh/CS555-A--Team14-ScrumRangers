@@ -372,9 +372,9 @@ const styles = StyleSheet.create({
   },
 
   videoDescription: {
-    color: 'black', // Dark white color
+    color: 'white', // Dark white color
     fontWeight: 'bold', // Bold font
-    fontSize: 20, // Slightly smaller font size than location
+    fontSize: 12, // Slightly smaller font size than location
     marginTop: 4, // Keep the existing spacing
   },
 });
