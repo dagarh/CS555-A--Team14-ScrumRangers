@@ -288,37 +288,39 @@ async function uploadVideo(uri) {
               useNativeControls={false}
               style={StyleSheet.absoluteFill}
             />
+              <View style={styles.videoMetadata}>
+                <View style={styles.locationContainer}>
+                  <Ionicons name="location-outline" size={20} color="white" style={styles.locationIcon} />
+                  <Text style={styles.videoLocation}>{item.location}</Text>
+                </View>
+                <Text style={styles.videoDescription}>{item.description}</Text>
+              </View>
 
-            <View style={styles.videoMetadata}>
-              <Text style={styles.videoLocation}>{item.location}</Text>
-              <Text style={styles.videoDescription}>{item.description}</Text>
-            </View>
-
-            <View style={styles.iconContainer}>
-              <Ionicons style={styles.iconindividual}
-                name={item.liked ? "heart" : "heart-outline"}
-                size={30}
-                color={item.liked ? "red" : "black"}
-                onPress={() => handleLike(item.id)}
-              />
-              <Ionicons style={styles.iconindividual}
-                name="chatbubble-outline"
-                size={30}
-                color="black"
-                onPress={handleComment}
-              />
-              <Ionicons style={styles.iconindividual}
-                name={item.reported ? "alert-circle" : "alert-circle-outline"}
-                size={30}
-                color={item.reported ? "black" : "black"}
-                onPress={reportVideo}
-              />
-              <Ionicons style={styles.iconindividual}
-                name={item.bookmarked ? "bookmark" : "bookmark-outline"}
-                size={30}
-                color={item.bookmarked ? "black" : "black"}
-                onPress={() => handleBookmark(item.id)}
-              />
+              <View style={styles.iconContainer}>
+                <Ionicons style={styles.iconindividual}
+                  name={item.liked ? "heart" : "heart-outline"}
+                  size={30}
+                  color={item.liked ? "red" : "black"}
+                  onPress={() => handleLike(item.id)}
+                />
+                <Ionicons style={styles.iconindividual}
+                  name="chatbubble-outline"
+                  size={30}
+                  color="black"
+                  onPress={handleComment}
+                />
+                <Ionicons style={styles.iconindividual}
+                  name={item.reported ? "alert-circle" : "alert-circle-outline"}
+                  size={30}
+                  color={item.reported ? "black" : "black"}
+                  onPress={reportVideo}
+                />
+                <Ionicons style={styles.iconindividual}
+                  name={item.bookmarked ? "bookmark" : "bookmark-outline"}
+                  size={30}
+                  color={item.bookmarked ? "black" : "black"}
+                  onPress={() => handleBookmark(item.id)}
+                />
             </View>
           </View>
         )}
@@ -362,20 +364,25 @@ const styles = StyleSheet.create({
     bottom: 220,
     left: 0,
     right: 0,
-     // Use a semi-transparent black background
-    padding: 10, 
+    padding: 10,
+  },
+  locationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  locationIcon: {
+    marginRight: 5,
   },
   videoLocation: {
-    color: 'black', // Dark white color
-    fontWeight: 'bold', // Bold font
-    fontSize: 30, // You can adjust the font size as needed
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 23,
   },
-
   videoDescription: {
-    color: 'white', // Dark white color
-    fontWeight: 'bold', // Bold font
-    fontSize: 12, // Slightly smaller font size than location
-    marginTop: 4, // Keep the existing spacing
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 12,
+    marginTop: 4,
   },
 });
 
