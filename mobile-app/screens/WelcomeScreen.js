@@ -9,6 +9,9 @@ import Settings from './Settings';
 import Tourist from './Tourist';
 import LocalActivity from './Activity';
 import profile from './profile';
+import posts from './posts';
+import likes from './likes';
+import ChangePassword from './ChangePassword';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -44,6 +47,9 @@ function WelcomeScreen() {
         <Stack.Navigator initialRouteName="MainTabs">
             <Stack.Screen name="MainTabs" component={TabNavigator} options={{ headerShown: false }} />
             <Stack.Screen name="profile" component={profile} />
+            <Stack.Screen name="posts" component={posts} />
+            <Stack.Screen name="likes" component={likes} />
+            <Stack.Screen name="ChangePassword" component={ChangePassword} />
         </Stack.Navigator>
     );
 }

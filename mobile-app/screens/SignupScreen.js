@@ -1,6 +1,6 @@
 import React from 'react';
 import { useContext, useState } from 'react';
-import { Alert, View, ImageBackground, StyleSheet } from 'react-native';
+import { Alert, View, ImageBackground, StyleSheet , Image } from 'react-native';
 import AuthContent from '../components/Auth/AuthContent';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
 import { AuthContext } from '../store/auth-context';
@@ -34,11 +34,16 @@ function SignupScreen() {
       source={require('../assets/new.jpeg')} 
       style={styles.backgroundImage}
     >
+      <Image 
+        source={require('../assets/city-white.png')} // Replace with the path to your logo image
+        style={styles.logo}
+      />
       <View style={styles.container}>
         <AuthContent onAuthenticate={signupHandler} />
       </View>
     </ImageBackground>
   );
+  
 }
 
 const styles = StyleSheet.create({
@@ -51,6 +56,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  logo: {
+    width: 190, // Adjust the width as needed
+    height: 200, // Adjust the height as needed
+    alignSelf: 'center', // Center the logo
+    marginTop: 0, // Add some top margin
+    resizeMode: 'contain', // Ensure the image is scaled correctly
   },
 });
 

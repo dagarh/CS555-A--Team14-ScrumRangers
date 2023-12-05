@@ -232,7 +232,7 @@ async function uploadVideo(uri) {
   }
 }
 
-  async function saveRecord(fileType, url, createdAt) {
+  async function saveRecord(fileType, url, createdAt, location, description) {
     try {
       await addDoc(collection(db, "files"), {
         fileType,
@@ -327,7 +327,7 @@ async function uploadVideo(uri) {
         onPress={recordVideo}
         style={{
           position: "absolute",
-          bottom: 24,
+          top: 24,
           left: 24,
           width: 60,
           height: 60,
@@ -359,18 +359,23 @@ const styles = StyleSheet.create({
   },
   videoMetadata: {
     position: 'absolute',
-    bottom: 10,
-    left: 10,
-    right: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)', // Use a semi-transparent black background
+    bottom: 220,
+    left: 0,
+    right: 0,
+     // Use a semi-transparent black background
+    padding: 10, 
   },
   videoLocation: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: 'black', // Dark white color
+    fontWeight: 'bold', // Bold font
+    fontSize: 30, // You can adjust the font size as needed
   },
+
   videoDescription: {
-    color: 'white',
-    marginTop: 4, // If you want some space between the location and description
+    color: 'black', // Dark white color
+    fontWeight: 'bold', // Bold font
+    fontSize: 20, // Slightly smaller font size than location
+    marginTop: 4, // Keep the existing spacing
   },
 });
 

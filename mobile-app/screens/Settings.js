@@ -10,7 +10,7 @@ function Settings({ navigation }) {
 
   return (
       <View style={styles.Settings}>
-          <TouchableOpacity style={styles.box} onPress={() => navigateToScreen('Posts')}>
+          <TouchableOpacity style={styles.box} onPress={() => navigateToScreen('posts')}>
               <Text style={styles.Set}>Posts</Text>
               <Ionicons name="arrow-forward" size={22} color="black" />
           </TouchableOpacity>
@@ -20,7 +20,7 @@ function Settings({ navigation }) {
               <Ionicons name="arrow-forward" size={22} color="black" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.box} onPress={() => navigateToScreen('Likes')}>
+          <TouchableOpacity style={styles.box} onPress={() => navigateToScreen('likes')}>
               <Text style={styles.Set}>Likes</Text>
               <Ionicons name="arrow-forward" size={22} color="black" />
           </TouchableOpacity>
