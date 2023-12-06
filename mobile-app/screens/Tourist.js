@@ -15,7 +15,7 @@ import { addDoc, collection, onSnapshot } from 'firebase/firestore';
 import { db, storage } from '../firebaseConfig';
 import { Video } from 'expo-av';
 import { AuthContext } from '../store/auth-context';
-import CommentsWindow from './comments.js';
+import CommentsWindow from './videoComments.js';
 const { width, height } = Dimensions.get('window');
 
 function Tourist({ navigation }) {

@@ -13,6 +13,7 @@ import posts from './posts';
 import likes from './likes';
 import ChangePassword from './ChangePassword';
 import SavedPosts from './SavedPosts';
+import UserComments from "./userComments"
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +53,7 @@ function WelcomeScreen() {
             <Stack.Screen name="likes" component={likes} />
             <Stack.Screen name="ChangePassword" component={ChangePassword} />
             <Stack.Screen name="SavedPosts" component={SavedPosts} />
+            <Stack.Screen name="Comments" component={UserComments} />
         </Stack.Navigator>
     );
 }
