@@ -117,7 +117,7 @@ public class VideoController {
 
 		try {
 
-			// GetCommentsResponseDTO commentsResposne = communityExplorationService.fetchVideos(locName, errorList);
+			GetCommentsResponseDTO commentsResposne = communityExplorationService.getCommentsBasedOnUserOrVideo(Integer.parseInt(userId), videoId, errorList);
 
 			if (CollectionUtils.isEmpty(errorList)) {
 				// responseBody.setData(commentsResposne);
@@ -190,14 +190,14 @@ public class VideoController {
 		try {
 			if (CollectionUtils.isEmpty(errorList)) {
 				// All request validations passed successfully
-				// PostVideoResponseDTO postVideoResponseDTO = communityExplorationService.postVideo(postVideoRequest, errorList);
+				PostCommentResponseDTO postCommentResponseDTO = communityExplorationService.postComment(videoId, postCommentRequest, errorList);
 
 
 				if(CollectionUtils.isNotEmpty(errorList)) {
 					responseBody.setError(errorList);
 				} else {
 					// All business validations passed successfully
-					// responseBody.setData(postVideoResponseDTO);
+					responseBody.setData(postCommentResponseDTO);
 				}
 			} else {
 				responseBody.setError(errorList);
