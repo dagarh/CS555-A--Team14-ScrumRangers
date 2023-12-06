@@ -15,6 +15,7 @@ import { addDoc, collection, onSnapshot } from 'firebase/firestore';
 import { db, storage } from '../firebaseConfig';
 import { Video } from 'expo-av';
 import { AuthContext } from '../store/auth-context';
+import CommentsWindow from './comments.js';
 const { width, height } = Dimensions.get('window');
 
 function Tourist({ navigation }) {
@@ -25,8 +26,10 @@ function Tourist({ navigation }) {
   const [description, setDescription] = useState('');
   const videoRef = useRef(null);
   const [dialogVisible, setDialogVisible] = useState(false);
-  const [userInput, setUserInput] = useState('');
-  const authCtx = useContext(AuthContext); 
+  const [userInput, setUserInput] = useState("");
+  const [showComments, setShowComments] = useState(false);
+  const [videoForComments, setvideoForComments] = useState(0);
+  const authCtx = useContext(AuthContext);
 
 
   useEffect(() => {
@@ -43,47 +46,89 @@ function Tourist({ navigation }) {
     return () => unsubscribe();
   }, []);
 
-
-
-  async function promptAsync(message) {
-    return new Promise((resolve) => {
-      Alert.prompt(
-        message,
-        null,
-        (userInput) => resolve(userInput),
-        'plain-text',
-        null,
-        'default'
-      );
-    });
-  }
-
   async function pickVideo() {
     try {
-      let result = await ImagePicker.launchImageLibraryAsync({
+      const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Videos,
         quality: 1,
-        videoMaxDuration: 30,
       });
-  
-      if (!result.canceled) {
-        // Check if the duration of the video is within the limit
-        if (result.assets[0].duration <= 30000) {
-          // Upload the video with location and description
-          await uploadVideo(result.assets[0].uri);
+
+      if (!result.canceled && result.assets) {
+        const videoUri = result.assets[0].uri;
+        setVideo(videoUri);
+
+        // Prompt for location input
+        const locationInput = await new Promise((resolve) => {
+          Alert.prompt(
+            "Enter Location",
+            "",
+            [
+              {
+                text: "Cancel",
+                onPress: () => resolve(null),
+                style: "cancel"
+              },
+              {
+                text: "OK",
+                onPress: (text) => resolve(text)
+              }
+            ],
+            "plain-text"
+          );
+        });
+
+        if (locationInput) {
+          setLocation(locationInput);
         } else {
-          Alert.alert("Error", "Please select a video that is less than 30 seconds long.");
+          // Handle the case where user does not enter location
+        }
+
+        // Prompt for description input
+        const descriptionInput = await new Promise((resolve) => {
+          Alert.prompt(
+            "Enter Video Description",
+            "",
+            [
+              {
+                text: "Cancel",
+                onPress: () => resolve(null),
+                style: "cancel"
+              },
+              {
+                text: "OK",
+                onPress: (text) => resolve(text)
+              }
+            ],
+            "plain-text"
+          );
+        });
+
+        if (descriptionInput) {
+          setDescription(descriptionInput);
+        } else {
+          // Handle the case where user does not enter description
+        }
+
+        if (videoRef.current) {
+          const status = await videoRef.current.getStatusAsync();
+
+          if (status.durationMillis <= 30000) {
+            await uploadVideo(videoUri);
+          } else {
+            Alert.alert('Alert', 'Please select a video that is less than 30 seconds.');
+            setVideo('');
+            setLocation('');
+            setDescription('');
+          }
         }
       }
     } catch (error) {
-      console.error("Error picking or uploading video:", error);
-      // Handle the error appropriately, e.g., show an error message to the user
+      console.error('Error picking video:', error);
     }
   }
-  
-  
-  
-  
+
+
+
 
   async function recordVideo() {
     Alert.alert(
@@ -164,11 +209,9 @@ async function uploadVideo(uri) {
   try {
     //const user = authCtx.user; // Adjust according to how the user is stored in AuthContext
 
-      
-    let currentLocation = location;
-    let currentDescription = description;
 
-     // const userId = user.uid; 
+    let currentLocation = location;
+     // const userId = user.uid;
     const response = await fetch(uri);
     const blob = await response.blob();
     const storageRef = ref(storage, `Videos/${new Date().getTime()}`);
@@ -195,40 +238,11 @@ async function uploadVideo(uri) {
       });
 
       if (locationInput) {
-        setLocation(locationInput); 
+        setLocation(locationInput);
         currentLocation = locationInput; // Store the provided location
       } else {
         Alert.alert('Input Required', 'You need to enter a location to proceed.');
         return; // Exit the function if no location is entered
-      }
-    }
-
-    if (!description) {
-      const descriptionInput = await new Promise((resolve) => {
-        Alert.prompt(
-          "Enter Description",
-          "Please enter a description for the video",
-          [
-            {
-              text: "Cancel",
-              onPress: () => resolve(null),
-              style: "cancel"
-            },
-            {
-              text: "OK",
-              onPress: (text) => resolve(text)
-            }
-          ],
-          "plain-text"
-        );
-      });
-
-      if (descriptionInput) {
-        setDescription(descriptionInput);
-        currentDescription = descriptionInput; // Store the provided description
-      } else {
-        Alert.alert('Input Required', 'You need to enter a description to proceed.');
-        return; // Exit the function if no description is entered
       }
     }
 
@@ -245,7 +259,7 @@ async function uploadVideo(uri) {
         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
           const videoId = await uploadVideoToAPI("1", currentLocation, description, downloadURL);
 if (videoId) {
-  await saveRecord('video', downloadURL, new Date().toISOString(), currentLocation, currentDescription, videoId);
+  await saveRecord('video', downloadURL, new Date().toISOString(), currentLocation, description, videoId);
 } else {
   console.error('Failed to get videoId from API');
 }
@@ -255,7 +269,7 @@ if (videoId) {
         });
       }
     );
-   
+
   } catch (error) {
     console.error('Error uploading video:', error);
   }
@@ -323,7 +337,13 @@ async function uploadVideoToAPI(userId, location, description, videoUrl) {
     setFiles(files.map(file => file.id === id ? { ...file, bookmarked: !file.bookmarked } : file));
   };
 
-  const handleComment = () => { console.log("Comment Pressed"); };
+  const handleComment = () => {
+    setShowComments(true);
+  };
+
+  const closeCommentsWindow = () => {
+    setShowComments(false);
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -354,31 +374,38 @@ async function uploadVideoToAPI(userId, location, description, videoUrl) {
                 <Text style={styles.videoDescription}>{item.description}</Text>
               </View>
 
-              <View style={styles.iconContainer}>
-                <Ionicons style={styles.iconindividual}
-                  name={item.liked ? "heart" : "heart-outline"}
-                  size={30}
-                  color={item.liked ? "red" : "black"}
-                  onPress={() => handleLike(item.id)}
-                />
-                <Ionicons style={styles.iconindividual}
-                  name="chatbubble-outline"
-                  size={30}
-                  color="black"
-                  onPress={handleComment}
-                />
-                <Ionicons style={styles.iconindividual}
-                  name={item.reported ? "alert-circle" : "alert-circle-outline"}
-                  size={30}
-                  color={item.reported ? "black" : "black"}
-                  onPress={reportVideo}
-                />
-                <Ionicons style={styles.iconindividual}
-                  name={item.bookmarked ? "bookmark" : "bookmark-outline"}
-                  size={30}
-                  color={item.bookmarked ? "black" : "black"}
-                  onPress={() => handleBookmark(item.id)}
-                />
+            <View style={styles.iconContainer}>
+              <Ionicons
+                style={styles.iconindividual}
+                name={item.liked ? "heart" : "heart-outline"}
+                size={30}
+                color={item.liked ? "red" : "black"}
+                onPress={() => handleLike(item.id)}
+              />
+              <Ionicons
+                style={styles.iconindividual}
+                name="chatbubble-outline"
+                size={30}
+                color="black"
+                onPress={() => {
+                  handleComment()
+                  setvideoForComments(item)
+                }}
+              />
+              <Ionicons
+                style={styles.iconindividual}
+                name={item.reported ? "alert-circle" : "alert-circle-outline"}
+                size={30}
+                color={item.reported ? "black" : "black"}
+                onPress={reportVideo}
+              />
+              <Ionicons
+                style={styles.iconindividual}
+                name={item.bookmarked ? "bookmark" : "bookmark-outline"}
+                size={30}
+                color={item.bookmarked ? "black" : "black"}
+                onPress={() => handleBookmark(item.id)}
+              />
             </View>
           </View>
         )}
@@ -399,7 +426,12 @@ async function uploadVideoToAPI(userId, location, description, videoUrl) {
       >
         <Ionicons name="videocam" size={30} color="white" />
       </TouchableOpacity>
-
+      <CommentsWindow
+        visible={showComments}
+        onClose={closeCommentsWindow}
+        video={videoForComments}
+        userId={1}
+      />
     </View>
   );
 }
