@@ -12,6 +12,18 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import axios from "axios";
 
+const mockUsernames = [
+  "default_username", // 0
+  "Kartheek", // 1
+  "Adrien", // 2
+  "Chandana", // 3
+  "Dhruraj", // 4
+  "Himanshu", // 5
+  "Manoj", // 6
+  "Raghavi", // 7
+  "Vishwesh", // 8
+];
+
 const CommentsWindow = ({ visible, onClose, video, userId }) => {
   // Dummy comments for demonstration
   const [comments, setComments] = useState([]);
@@ -82,8 +94,7 @@ const CommentsWindow = ({ visible, onClose, video, userId }) => {
                     fontWeight: "bold",
                   }}
                 >
-                  {"User_"}
-                  {comment.userId}{" "}
+                  {mockUsernames[comment.userId]}
                 </Text>
                 <Text
                   style={{ fontSize: 16, marginBottom: 10, marginLeft: 20 }}
