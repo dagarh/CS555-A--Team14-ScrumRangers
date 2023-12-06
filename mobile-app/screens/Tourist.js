@@ -57,58 +57,14 @@ function Tourist({ navigation }) {
         const videoUri = result.assets[0].uri;
         setVideo(videoUri);
 
-        // Prompt for location input
-        const locationInput = await new Promise((resolve) => {
-          Alert.prompt(
-            "Enter Location",
-            "",
-            [
-              {
-                text: "Cancel",
-                onPress: () => resolve(null),
-                style: "cancel"
-              },
-              {
-                text: "OK",
-                onPress: (text) => resolve(text)
-              }
-            ],
-            "plain-text"
-          );
-        });
-
-        if (locationInput) {
-          setLocation(locationInput);
-        } else {
-          // Handle the case where user does not enter location
-        }
-
-        // Prompt for description input
-        const descriptionInput = await new Promise((resolve) => {
-          Alert.prompt(
-            "Enter Video Description",
-            "",
-            [
-              {
-                text: "Cancel",
-                onPress: () => resolve(null),
-                style: "cancel"
-              },
-              {
-                text: "OK",
-                onPress: (text) => resolve(text)
-              }
-            ],
-            "plain-text"
-          );
-        });
+        
 
         if (descriptionInput) {
           setDescription(descriptionInput);
         } else {
           // Handle the case where user does not enter description
         }
-
+        await uploadVideo(videoUri);
         if (videoRef.current) {
           const status = await videoRef.current.getStatusAsync();
 
