@@ -15,6 +15,8 @@ import { addDoc, collection, onSnapshot } from 'firebase/firestore';
 import { db, storage } from '../firebaseConfig';
 import { Video } from 'expo-av';
 import { AuthContext } from '../store/auth-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const { width, height } = Dimensions.get('window');
 
 function Tourist({ navigation }) {
@@ -43,86 +45,44 @@ function Tourist({ navigation }) {
     return () => unsubscribe();
   }, []);
 
+
+
+  async function promptAsync(message) {
+    return new Promise((resolve) => {
+      Alert.prompt(
+        message,
+        null,
+        (userInput) => resolve(userInput),
+        'plain-text',
+        null,
+        'default'
+      );
+    });
+  }
+
   async function pickVideo() {
     try {
-      const result = await ImagePicker.launchImageLibraryAsync({
+      let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Videos,
         quality: 1,
+        videoMaxDuration: 30,
       });
   
-      if (!result.canceled && result.assets) {
-        const videoUri = result.assets[0].uri;
-        setVideo(videoUri);
-  
-        // Prompt for location input
-        const locationInput = await new Promise((resolve) => {
-          Alert.prompt(
-            "Enter Location",
-            "",
-            [
-              {
-                text: "Cancel",
-                onPress: () => resolve(null),
-                style: "cancel"
-              },
-              {
-                text: "OK",
-                onPress: (text) => resolve(text)
-              }
-            ],
-            "plain-text"
-          );
-        });
-  
-        if (locationInput) {
-          setLocation(locationInput);
+      if (!result.canceled) {
+        // Check if the duration of the video is within the limit
+        if (result.assets[0].duration <= 30000) {
+          // Upload the video with location and description
+          await uploadVideo(result.assets[0].uri);
         } else {
-          // Handle the case where user does not enter location
-        }
-  
-        // Prompt for description input
-        const descriptionInput = await new Promise((resolve) => {
-          Alert.prompt(
-            "Enter Video Description",
-            "",
-            [
-              {
-                text: "Cancel",
-                onPress: () => resolve(null),
-                style: "cancel"
-              },
-              {
-                text: "OK",
-                onPress: (text) => resolve(text)
-              }
-            ],
-            "plain-text"
-          );
-        });
-  
-        if (descriptionInput) {
-          setDescription(descriptionInput);
-        } else {
-          // Handle the case where user does not enter description
-        }
-  
-        if (videoRef.current) {
-          const status = await videoRef.current.getStatusAsync();
-  
-          if (status.durationMillis <= 30000) {
-            await uploadVideo(videoUri);
-          } else {
-            Alert.alert('Alert', 'Please select a video that is less than 30 seconds.');
-            setVideo('');
-            setLocation('');
-            setDescription('');
-          }
+          Alert.alert("Error", "Please select a video that is less than 30 seconds long.");
         }
       }
     } catch (error) {
-      console.error('Error picking video:', error);
+      console.error("Error picking or uploading video:", error);
+      // Handle the error appropriately, e.g., show an error message to the user
     }
   }
+  
   
   
   
@@ -208,6 +168,8 @@ async function uploadVideo(uri) {
 
       
     let currentLocation = location;
+    let currentDescription = description;
+
      // const userId = user.uid; 
     const response = await fetch(uri);
     const blob = await response.blob();
@@ -243,6 +205,35 @@ async function uploadVideo(uri) {
       }
     }
 
+    if (!description) {
+      const descriptionInput = await new Promise((resolve) => {
+        Alert.prompt(
+          "Enter Description",
+          "Please enter a description for the video",
+          [
+            {
+              text: "Cancel",
+              onPress: () => resolve(null),
+              style: "cancel"
+            },
+            {
+              text: "OK",
+              onPress: (text) => resolve(text)
+            }
+          ],
+          "plain-text"
+        );
+      });
+
+      if (descriptionInput) {
+        setDescription(descriptionInput);
+        currentDescription = descriptionInput; // Store the provided description
+      } else {
+        Alert.alert('Input Required', 'You need to enter a description to proceed.');
+        return; // Exit the function if no description is entered
+      }
+    }
+
     uploadTask.on(
       'state_changed',
       (snapshot) => {
@@ -256,7 +247,7 @@ async function uploadVideo(uri) {
         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
           const videoId = await uploadVideoToAPI("1", currentLocation, description, downloadURL);
 if (videoId) {
-  await saveRecord('video', downloadURL, new Date().toISOString(), currentLocation, description, videoId);
+  await saveRecord('video', downloadURL, new Date().toISOString(), currentLocation, currentDescription, videoId);
 } else {
   console.error('Failed to get videoId from API');
 }
