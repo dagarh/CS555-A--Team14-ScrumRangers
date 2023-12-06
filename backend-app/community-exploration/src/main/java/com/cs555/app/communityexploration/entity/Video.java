@@ -42,17 +42,17 @@ public class Video {
 
 	@Column(name = "Likes")
 	private int likes;
-
+	
+	@Column(name = "Reports")
+	private int reports;
+	
 	// Default constructor
 	public Video() {}
 
 	/**
 	 * @param userId
 	 * @param location
-	 * @param description
 	 * @param videoUrl
-	 * @param postedAt
-	 * @param likes
 	 */
 	public Video(int userId, String location, String videoUrl) {
 		super();
@@ -177,11 +177,26 @@ public class Video {
 	public void setLikes(int likes) {
 		this.likes = likes;
 	}
+	
+	/**
+	 * @return the reports
+	 */
+	public int getReports() {
+		return reports;
+	}
+
+	/**
+	 * @param reports the reports to set
+	 */
+	public void setReports(int reports) {
+		this.reports = reports;
+	}
 
 	@Override
 	public String toString() {
 		return "Video [videoId=" + videoId + ", userId=" + userId + ", location=" + location + ", description="
-				+ description + ", videoUrl=" + videoUrl + ", postedAt=" + postedAt + ", likes=" + likes + "]";
+				+ description + ", videoUrl=" + videoUrl + ", postedAt=" + postedAt + ", likes=" + likes + ", reports="
+				+ reports + "]";
 	}
 
 }
