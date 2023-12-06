@@ -1,8 +1,9 @@
 //Events page
+import axios from 'axios';
 import React, { useState } from 'react';
 
 import {  TouchableOpacity, Linking } from 'react-native';
-import { View,TextInput,FlatList, StyleSheet,ImageBackground,Pressable,ScrollView } from 'react-native';
+import {TextInput,FlatList, StyleSheet,ImageBackground,Pressable} from 'react-native';
 import { Card, Title,Text } from 'react-native-paper';
 
 export default function Activity(){
@@ -11,11 +12,10 @@ export default function Activity(){
   
   const eventSearch = async () => {
     try {
-      const response = await fetch(
+      const response = await axios.get(
         `https://app.ticketmaster.com/discovery/v2/events.json?city=${location}&apikey=DTMrDmRKKAShzZxtDpPxyrUaEIp6Nyym`
       );
-      const events= await response.json();
-      setEvents(events._embedded.events);
+      setEvents(response._embedded.events);
     } catch (error) {
       console.error('Error fetching events:', error);
     }
@@ -69,9 +69,6 @@ const styles = StyleSheet.create({
     color:'gold'
 
   },
-  card: {
-    marginVertical: 8,
-  },
   backgroundImage: {
     flex: 1,
     resizeMode: 'cover',
@@ -85,9 +82,6 @@ const styles = StyleSheet.create({
   buttonText:{
     color:'white',
     textAlign:'center',
-  },
-  container:{
-    flex:1,
   }
 });
 
