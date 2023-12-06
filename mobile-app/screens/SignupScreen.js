@@ -29,26 +29,47 @@ function SignupScreen() {
   function askUserPreferences() {
     return new Promise((resolve) => {
       const completeSignup = () => resolve();
-
+  
+      function askNearbyContent(interest, activity, city) {
+        Alert.alert(
+          'Would you like to see content from cities near you?',
+          '',
+          [
+            { text: 'Yes', onPress: () => completeSignup() },
+            { text: 'No', onPress: () => completeSignup() }
+          ],
+          { cancelable: false }
+        );
+      }
+  
+      function askCityPreference(interest, activity) {
+        Alert.alert(
+          'Which cities are you most interested in exploring?',
+          '',
+          [
+            { text: 'Hoboken', onPress: () => askNearbyContent(interest, activity, 'Hoboken') },
+            { text: 'New York', onPress: () => askNearbyContent(interest, activity, 'New York') },
+            { text: 'Atlantic City', onPress: () => askNearbyContent(interest, activity, 'Atlantic City') },
+            { text: 'Other', onPress: () => askNearbyContent(interest, activity, 'Other') }
+          ],
+          { cancelable: false }
+        );
+      }
+  
       function askActivities(interest) {
         Alert.alert(
           'What types of activities do you enjoy?',
           '',
           [
-            { text: 'Walking Tours', onPress: () => finalizePreferences(interest, 'Walking Tours') },
-            { text: 'Museum Visits', onPress: () => finalizePreferences(interest, 'Museum Visits') },
-            { text: 'Dining Out', onPress: () => finalizePreferences(interest, 'Dining Out') },
-            { text: 'Other', onPress: () => finalizePreferences(interest, 'Other') }
+            { text: 'Walking Tours', onPress: () => askCityPreference(interest, 'Walking Tours') },
+            { text: 'Museum Visits', onPress: () => askCityPreference(interest, 'Museum Visits') },
+            { text: 'Dining Out', onPress: () => askCityPreference(interest, 'Dining Out') },
+            { text: 'Other', onPress: () => askCityPreference(interest, 'Other') }
           ],
           { cancelable: false }
         );
       }
-
-      function finalizePreferences(interest, activity) {
-        console.log(`Interest: ${interest}, Activity: ${activity}`);
-        completeSignup(); // Use the completeSignup function to resolve the promise
-      }
-
+  
       // First question
       Alert.alert(
         'What are your main interests in city exploration?',
@@ -64,6 +85,7 @@ function SignupScreen() {
       );
     });
   }
+  
   
 
   if (isAuthenticating) {
