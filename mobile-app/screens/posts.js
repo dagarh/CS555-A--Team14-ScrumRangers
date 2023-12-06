@@ -25,23 +25,32 @@ function AllPosts() {
   }, []);
 
   const renderVideoItem = ({ item }) => {
-    const isPlaying = selectedVideo === item.videoId;
+    // Check if the video URL is from Firebase
+    const isFirebaseVideo = item.url.includes('firebasestorage.googleapis.com');
+  
+    // Determine if the video should be playing
+    const isPlaying = selectedVideo === item.videoId && isFirebaseVideo;
+  
+    // Render only Firebase videos
     return (
       <TouchableOpacity
         style={styles.videoContainer}
         onPress={() => setSelectedVideo(isPlaying ? null : item.videoId)}
       >
-        <Video
-          source={{ uri: item.url }}
-          rate={1.0}
-          volume={1.0}
-          isMuted={!isPlaying}
-          resizeMode="cover"
-          shouldPlay={isPlaying}
-          isLooping
-          useNativeControls
-          style={StyleSheet.absoluteFill}
-        />
+        {isFirebaseVideo && (
+          <Video
+            source={{ uri: item.url }}
+            rate={1.0}
+            volume={1.0}
+            isMuted={!isPlaying}
+            resizeMode="cover"
+            shouldPlay={isPlaying}
+            isLooping
+            useNativeControls
+            style={StyleSheet.absoluteFill}
+            onError={(e) => console.error('Video Error:', e)}
+          />
+        )}
         {!isPlaying && (
           <View style={styles.videoOverlay}>
             <Text style={styles.videoLocation}>{item.location}</Text>
@@ -51,7 +60,6 @@ function AllPosts() {
       </TouchableOpacity>
     );
   };
-
   return (
     <View style={styles.container}>
       <FlatList

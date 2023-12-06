@@ -18,7 +18,7 @@ const CommentsWindow = ({ visible, onClose, video, userId }) => {
   const [newComment, setNewComment] = useState("");
 
   const addComment = async (videoId, userId) => {
-    console.log("Submitting comment with ", videoId, userId);
+    // console.log("Submitting comment with ", videoId, userId);
     if (newComment.trim() !== "") {
       let response = await axios.post(
         `https://c5f9-108-53-61-3.ngrok-free.app/community-exploration/api/v1/videos/${videoId}/comment`,
@@ -27,7 +27,7 @@ const CommentsWindow = ({ visible, onClose, video, userId }) => {
           comment: newComment,
         }
       );
-      console.log(response);
+      // console.log(response);
       setComments([{ userId: userId, comment: newComment }, ...comments]);
       setNewComment("");
     }
@@ -45,8 +45,8 @@ const CommentsWindow = ({ visible, onClose, video, userId }) => {
       console.error(`Could not retrieve comments for video ${videoId}`);
       return null;
     }
-    console.log("got data: ", data);
-    console.log(`Got comments for video ${videoId}: \n${data.data.comments}`);
+    // console.log("got data: ", data);
+    // console.log(`Got comments for video ${videoId}: \n${data.data.comments}`);
     setComments(data.data.comments);
   };
 
