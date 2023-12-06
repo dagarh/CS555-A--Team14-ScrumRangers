@@ -10,7 +10,8 @@ public enum ErrorResponseEnum {
 	DATABASE_ISSUE_FOUND("DATABASE_ISSUE_FOUND", "Database issue is found"),
 	MISSING_VIDEO_URL("MISSING_VIDEO_URL", "Video Url is missing"),
 	MISSING_USER_ID("MISSING_USER_ID", "User id can't be zero"),
-	MISSING_LOCATION("MISSING_LOCATION", "Location is missing");
+	MISSING_LOCATION("MISSING_LOCATION", "Location is missing"),
+	MISSING_COMMENT("MISSING_COMMENT", "Comment is empty");
 
 
 	private final String responseCode;

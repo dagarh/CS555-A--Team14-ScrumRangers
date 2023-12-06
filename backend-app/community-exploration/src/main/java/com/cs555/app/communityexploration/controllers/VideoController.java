@@ -11,13 +11,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cs555.app.communityexploration.constant.CommunityExplorationConstant;
 import com.cs555.app.communityexploration.constant.UrlConstants;
+import com.cs555.app.communityexploration.contract.request.PostCommentRequest;
 import com.cs555.app.communityexploration.contract.request.PostVideoRequest;
 import com.cs555.app.communityexploration.contract.request.VideoLikeRequest;
+import com.cs555.app.communityexploration.contract.response.GetCommentsResponseDTO;
 import com.cs555.app.communityexploration.contract.response.GetVideosResponseDTO;
+import com.cs555.app.communityexploration.contract.response.PostCommentResponseDTO;
+import com.cs555.app.communityexploration.contract.response.PostLikeResponseDTO;
 import com.cs555.app.communityexploration.contract.response.PostVideoResponseDTO;
 import com.cs555.app.communityexploration.contract.response.base.ErrorDTO;
 import com.cs555.app.communityexploration.contract.response.base.ResponseDTO;
@@ -80,7 +85,6 @@ public class VideoController {
 		List<ErrorDTO> errorList = new ArrayList<>();
 
 		try {
-
 			GetVideosResponseDTO videosResponse = communityExplorationService.fetchVideos(locName, errorList);
 
 			if (CollectionUtils.isEmpty(errorList)) {
@@ -100,15 +104,125 @@ public class VideoController {
 
 		return responseBody;
 	}
+	
+	@CrossOrigin
+	@ApiOperation(value = "Get comments based on the user or video", notes = "Provide the comments based on the user or video, if it exists in the database", response = ResponseDTO.class)
+	@GetMapping(value = {UrlConstants.COMMENTS_URL}, produces = "application/json")
+	public ResponseDTO<GetCommentsResponseDTO> getCommentsBasedOnUserOrVideo(
+			@RequestParam("userId") String userId,
+			@RequestParam("videoId") String videoId) {
+
+		ResponseDTO<GetCommentsResponseDTO> responseBody = new ResponseDTO<>();
+		List<ErrorDTO> errorList = new ArrayList<>();
+
+		try {
+
+			// GetCommentsResponseDTO commentsResposne = communityExplorationService.fetchVideos(locName, errorList);
+
+			if (CollectionUtils.isEmpty(errorList)) {
+				// responseBody.setData(commentsResposne);
+			} else {
+				responseBody.setError(errorList);
+			}
+
+			responseBody.setStatus(CommunityExplorationConstant.SUCCESS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			responseBody.setStatus(CommunityExplorationConstant.FAILURE);
+
+			// message is being sent only during exception
+			responseBody.setMessage(e.getMessage());
+		}
+
+		return responseBody;
+	}
 
 	@CrossOrigin
 	@ApiOperation(value = "Add like on a Video", notes = "Add like on a Video", response = ResponseDTO.class)
 	@PostMapping(value = UrlConstants.LIKE_VIDEO_URL, produces = "application/json")
-	public ResponseDTO<?> postLikeOnVideo(@RequestBody VideoLikeRequest videoLikeRequest) {
+	public ResponseDTO<PostLikeResponseDTO> postLikeOnVideo(
+			@ApiParam(value = "videoId on which like needs to be posted", required = true) @PathVariable("videoId") String videoId,
+			@RequestBody VideoLikeRequest videoLikeRequest) {
+
+		ResponseDTO<PostLikeResponseDTO> responseBody = new ResponseDTO<>();
+		List<ErrorDTO> errorList = new ArrayList<>();
+		RequestValidator.validateVideoLikeRequest(videoLikeRequest, errorList);
+
+		try {
+			if (CollectionUtils.isEmpty(errorList)) {
+				// All request validations passed successfully
+				// PostVideoResponseDTO postVideoResponseDTO = communityExplorationService.postVideo(postVideoRequest, errorList);
+
+
+				if(CollectionUtils.isNotEmpty(errorList)) {
+					responseBody.setError(errorList);
+				} else {
+					// All business validations passed successfully
+					// responseBody.setData(postVideoResponseDTO);
+				}
+			} else {
+				responseBody.setError(errorList);
+			}
+
+			responseBody.setStatus(CommunityExplorationConstant.SUCCESS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			responseBody.setStatus(CommunityExplorationConstant.FAILURE);
+
+			// message is being sent only during exception
+			responseBody.setMessage(e.getMessage());
+		}
+
+		return responseBody;
+	}
+	
+	@CrossOrigin
+	@ApiOperation(value = "Add comment on a Video", notes = "Add comment on a Video", response = ResponseDTO.class)
+	@PostMapping(value = UrlConstants.COMMENT_VIDEO_URL, produces = "application/json")
+	public ResponseDTO<PostCommentResponseDTO> postCommentOnVideo(
+			@ApiParam(value = "videoId on which comment needs to be posted", required = true) @PathVariable("videoId") String videoId,
+			@RequestBody PostCommentRequest postCommentRequest) {
+
+		ResponseDTO<PostCommentResponseDTO> responseBody = new ResponseDTO<>();
+		List<ErrorDTO> errorList = new ArrayList<>();
+		RequestValidator.validatePostCommentRequest(postCommentRequest, errorList);
+
+		try {
+			if (CollectionUtils.isEmpty(errorList)) {
+				// All request validations passed successfully
+				// PostVideoResponseDTO postVideoResponseDTO = communityExplorationService.postVideo(postVideoRequest, errorList);
+
+
+				if(CollectionUtils.isNotEmpty(errorList)) {
+					responseBody.setError(errorList);
+				} else {
+					// All business validations passed successfully
+					// responseBody.setData(postVideoResponseDTO);
+				}
+			} else {
+				responseBody.setError(errorList);
+			}
+
+			responseBody.setStatus(CommunityExplorationConstant.SUCCESS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			responseBody.setStatus(CommunityExplorationConstant.FAILURE);
+
+			// message is being sent only during exception
+			responseBody.setMessage(e.getMessage());
+		}
+
+		return responseBody;
+	}
+	
+	@CrossOrigin
+	@ApiOperation(value = "Add report on a Video", notes = "Add report on a Video", response = ResponseDTO.class)
+	@PostMapping(value = UrlConstants.REPORT_VIDEO_URL, produces = "application/json")
+	public ResponseDTO<?> postReportOnVideo(
+			@ApiParam(value = "videoId on which reporting needs to be done", required = true) @PathVariable("videoId") String videoId) {
 
 		ResponseDTO<?> responseBody = new ResponseDTO<>();
 		List<ErrorDTO> errorList = new ArrayList<>();
-		// RequestValidator.validatePostVideoRequest(postVideoRequest, errorList);
 
 		try {
 			if (CollectionUtils.isEmpty(errorList)) {
