@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   View,
@@ -10,21 +10,51 @@ import {
   Button,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import axios from "axios";
 
-const CommentsWindow = ({ visible, onClose }) => {
+const CommentsWindow = ({ visible, onClose, video, userId }) => {
   // Dummy comments for demonstration
-  const [comments, setComments] = useState([
-    "Comment 1",
-    "Comment 2",
-    "Comment 3",
-  ]);
+  const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
-  const addComment = () => {
+
+  const addComment = async (videoId, userId) => {
+    console.log("Submitting comment with ", videoId, userId);
     if (newComment.trim() !== "") {
-      setComments([newComment, ...comments]);
+      let response = await axios.post(
+        `https://c5f9-108-53-61-3.ngrok-free.app/community-exploration/api/v1/videos/${videoId}/comment`,
+        {
+          userId: userId,
+          comment: newComment,
+        }
+      );
+      console.log(response);
+      setComments([{ userId: userId, comment: newComment }, ...comments]);
       setNewComment("");
     }
   };
+  const getCommentsFromVideo = async (videoId) => {
+    const { data } = await axios.get(
+      "https://c5f9-108-53-61-3.ngrok-free.app/community-exploration/api/v1/videos/comments",
+      {
+        params: {
+          videoId: videoId,
+        },
+      }
+    );
+    if (!data || data.status !== "success") {
+      console.error(`Could not retrieve comments for video ${videoId}`);
+      return null;
+    }
+    console.log("got data: ", data);
+    console.log(`Got comments for video ${videoId}: \n${data.data.comments}`);
+    setComments(data.data.comments);
+  };
+
+  useEffect(() => {
+    if (visible) {
+      getCommentsFromVideo(video.videoId);
+    }
+  }, [visible, video]);
   return (
     <Modal
       visible={visible}
@@ -52,12 +82,13 @@ const CommentsWindow = ({ visible, onClose }) => {
                     fontWeight: "bold",
                   }}
                 >
-                  some_user{" "}
+                  {"User_"}
+                  {comment.userId}{" "}
                 </Text>
                 <Text
                   style={{ fontSize: 16, marginBottom: 10, marginLeft: 20 }}
                 >
-                  {comment}
+                  {comment.comment}
                 </Text>
               </View>
             ))}
@@ -69,7 +100,10 @@ const CommentsWindow = ({ visible, onClose }) => {
               value={newComment}
               onChangeText={(text) => setNewComment(text)}
             />
-            <Button title="Submit" onPress={addComment} />
+            <Button
+              title="Submit"
+              onPress={() => addComment(video.videoId, userId)}
+            />
           </View>
         </View>
       </View>

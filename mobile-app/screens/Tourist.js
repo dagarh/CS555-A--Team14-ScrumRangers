@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import {
   View,
   TouchableOpacity,
@@ -28,6 +28,7 @@ function Tourist({ navigation }) {
   const [dialogVisible, setDialogVisible] = useState(false);
   const [userInput, setUserInput] = useState("");
   const [showComments, setShowComments] = useState(false);
+  const [videoForComments, setvideoForComments] = useState(0);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "files"), (snapshot) => {
@@ -285,7 +286,6 @@ function Tourist({ navigation }) {
   };
 
   const handleComment = () => {
-    // console.log("Comment Pressed");
     setShowComments(true);
   };
 
@@ -340,7 +340,10 @@ function Tourist({ navigation }) {
                 name="chatbubble-outline"
                 size={30}
                 color="black"
-                onPress={handleComment}
+                onPress={() => {
+                  handleComment()
+                  setvideoForComments(item)
+                }}
               />
               <Ionicons
                 style={styles.iconindividual}
@@ -376,7 +379,12 @@ function Tourist({ navigation }) {
       >
         <Ionicons name="videocam" size={30} color="white" />
       </TouchableOpacity>
-      <CommentsWindow visible={showComments} onClose={closeCommentsWindow} />
+      <CommentsWindow
+        visible={showComments}
+        onClose={closeCommentsWindow}
+        video={videoForComments}
+        userId={1}
+      />
     </View>
   );
 }
