@@ -28,4 +28,6 @@ public interface CommunityExplorationService {
 	 * @return
 	 */
 	PostVideoResponseDTO postVideo(PostVideoRequest postVideoRequest, List<ErrorDTO> errorList);
+	
+	
 }

@@ -7,10 +7,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class VideoLikeRequest {
-
+public class PostCommentRequest {
+	
 	private int userId;
 	
+	private String comment;
+
 	/**
 	 * @return the userId
 	 */
@@ -25,9 +27,23 @@ public class VideoLikeRequest {
 		this.userId = userId;
 	}
 
-	@Override
-	public String toString() {
-		return "VideoLikeRequest [userId=" + userId + "]";
+	/**
+	 * @return the comment
+	 */
+	public String getComment() {
+		return comment;
 	}
 
+	/**
+	 * @param comment the comment to set
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	@Override
+	public String toString() {
+		return "PostCommentRequest [userId=" + userId + ", comment=" + comment + "]";
+	}
+	
 }

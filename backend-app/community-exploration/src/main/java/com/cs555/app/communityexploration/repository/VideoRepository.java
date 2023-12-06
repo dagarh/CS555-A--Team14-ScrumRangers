@@ -18,4 +18,6 @@ public interface VideoRepository extends JpaRepository<Video, Integer> {
 	public List<Video> findAllVideos();
 
 	public List<Video> findByLocation(String location);
+	
+	public List<Video> findByVideoId(int videoId);
 }
