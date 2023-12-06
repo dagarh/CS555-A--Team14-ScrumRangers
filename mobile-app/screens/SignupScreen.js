@@ -1,6 +1,6 @@
 import React from 'react';
 import { useContext, useState } from 'react';
-import { Alert, View, ImageBackground, StyleSheet , Image } from 'react-native';
+import { Alert, View, ImageBackground, StyleSheet, Image } from 'react-native';
 import AuthContent from '../components/Auth/AuthContent';
 import LoadingOverlay from '../components/ui/LoadingOverlay';
 import { AuthContext } from '../store/auth-context';
@@ -15,6 +15,7 @@ function SignupScreen() {
     setIsAuthenticating(true);
     try {
       const token = await createUser(email, password);
+      await askUserPreferences();
       authCtx.authenticate(token);
     } catch (error) {
       Alert.alert(
@@ -24,6 +25,46 @@ function SignupScreen() {
       setIsAuthenticating(false);
     }
   }
+
+  function askUserPreferences() {
+    return new Promise((resolve) => {
+      const completeSignup = () => resolve();
+
+      function askActivities(interest) {
+        Alert.alert(
+          'What types of activities do you enjoy?',
+          '',
+          [
+            { text: 'Walking Tours', onPress: () => finalizePreferences(interest, 'Walking Tours') },
+            { text: 'Museum Visits', onPress: () => finalizePreferences(interest, 'Museum Visits') },
+            { text: 'Dining Out', onPress: () => finalizePreferences(interest, 'Dining Out') },
+            { text: 'Other', onPress: () => finalizePreferences(interest, 'Other') }
+          ],
+          { cancelable: false }
+        );
+      }
+
+      function finalizePreferences(interest, activity) {
+        console.log(`Interest: ${interest}, Activity: ${activity}`);
+        completeSignup(); // Use the completeSignup function to resolve the promise
+      }
+
+      // First question
+      Alert.alert(
+        'What are your main interests in city exploration?',
+        '',
+        [
+          { text: 'Food', onPress: () => askActivities('Food') },
+          { text: 'History', onPress: () => askActivities('History') },
+          { text: 'Art', onPress: () => askActivities('Art') },
+          { text: 'Nightlife', onPress: () => askActivities('Nightlife') },
+          { text: 'Other', onPress: () => askActivities('Other') }
+        ],
+        { cancelable: false }
+      );
+    });
+  }
+  
 
   if (isAuthenticating) {
     return <LoadingOverlay message="Creating user..." />;

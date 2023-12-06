@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity ,Image} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 function Settings({ navigation }) {
@@ -34,11 +34,33 @@ function Settings({ navigation }) {
               <Text style={styles.Set}>Change Password</Text>
               <Ionicons name="arrow-forward" size={22} color="black" />
           </TouchableOpacity>
+          <View style={styles.footer}>
+        <Image 
+          source={require('../assets/City-black.png')}
+          style={styles.logo}
+        />
+        <Text style={styles.footerText}>@Team 14-Scrum Rangers</Text>
+      </View>
       </View>
   );
 }
 
 const styles = StyleSheet.create({
+    footer: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        marginBottom: 10,
+      },
+      logo: {
+        width: 100, // Adjust according to your logo's size
+        height: 100, // Adjust according to your logo's size
+        resizeMode: 'contain',
+      },
+      footerText: {
+        fontSize: 14,
+        color: '#000', // Adjust the color as needed
+      },
   Settings: {
       flex: 1,
       justifyContent: 'flex-start',
