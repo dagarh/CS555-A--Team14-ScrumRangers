@@ -11,8 +11,6 @@ public class PostCommentRequest {
 	
 	private int userId;
 	
-	private int videoId;
-	
 	private String comment;
 
 	/**
@@ -27,20 +25,6 @@ public class PostCommentRequest {
 	 */
 	public void setUserId(int userId) {
 		this.userId = userId;
-	}
-
-	/**
-	 * @return the videoId
-	 */
-	public int getVideoId() {
-		return videoId;
-	}
-
-	/**
-	 * @param videoId the videoId to set
-	 */
-	public void setVideoId(int videoId) {
-		this.videoId = videoId;
 	}
 
 	/**
@@ -59,7 +43,7 @@ public class PostCommentRequest {
 
 	@Override
 	public String toString() {
-		return "PostCommentRequest [userId=" + userId + ", videoId=" + videoId + ", comment=" + comment + "]";
+		return "PostCommentRequest [userId=" + userId + ", comment=" + comment + "]";
 	}
 	
 }

@@ -11,8 +11,6 @@ public class VideoLikeRequest {
 
 	private int userId;
 	
-	private int videoId;
-	
 	/**
 	 * @return the userId
 	 */
@@ -27,23 +25,9 @@ public class VideoLikeRequest {
 		this.userId = userId;
 	}
 
-	/**
-	 * @return the videoId
-	 */
-	public int getVideoId() {
-		return videoId;
-	}
-
-	/**
-	 * @param videoId the videoId to set
-	 */
-	public void setVideoId(int videoId) {
-		this.videoId = videoId;
-	}
-
 	@Override
 	public String toString() {
-		return "VideoLikeRequest [userId=" + userId + ", videoId=" + videoId + "]";
+		return "VideoLikeRequest [userId=" + userId + "]";
 	}
 
 }
