@@ -29,6 +29,8 @@ function Tourist({ navigation }) {
   const [userInput, setUserInput] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [videoForComments, setvideoForComments] = useState(0);
+  const [descriptionInput, setDescriptionInput] = useState('');
+
   const authCtx = useContext(AuthContext);
 
 
@@ -163,16 +165,15 @@ function Tourist({ navigation }) {
 
 async function uploadVideo(uri) {
   try {
-    //const user = authCtx.user; // Adjust according to how the user is stored in AuthContext
-
-
     let currentLocation = location;
-     // const userId = user.uid;
+    let currentDescription = description;
+
     const response = await fetch(uri);
     const blob = await response.blob();
     const storageRef = ref(storage, `Videos/${new Date().getTime()}`);
 
     const uploadTask = uploadBytesResumable(storageRef, blob);
+
     if (!location) {
       const locationInput = await new Promise((resolve) => {
         Alert.prompt(
@@ -195,10 +196,39 @@ async function uploadVideo(uri) {
 
       if (locationInput) {
         setLocation(locationInput);
-        currentLocation = locationInput; // Store the provided location
+        currentLocation = locationInput;
       } else {
         Alert.alert('Input Required', 'You need to enter a location to proceed.');
-        return; // Exit the function if no location is entered
+        return;
+      }
+    }
+
+    if (!description) {
+      const descriptionInput = await new Promise((resolve) => {
+        Alert.prompt(
+          "Enter Description",
+          "Please enter a description for the video",
+          [
+            {
+              text: "Cancel",
+              onPress: () => resolve(null),
+              style: "cancel"
+            },
+            {
+              text: "OK",
+              onPress: (text) => resolve(text)
+            }
+          ],
+          "plain-text"
+        );
+      });
+
+      if (descriptionInput) {
+        setDescription(descriptionInput);
+        currentDescription = descriptionInput;
+      } else {
+        Alert.alert('Input Required', 'You need to enter a description to proceed.');
+        return;
       }
     }
 
@@ -213,12 +243,12 @@ async function uploadVideo(uri) {
       },
       async () => {
         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-          const videoId = await uploadVideoToAPI("1", currentLocation, description, downloadURL);
-if (videoId) {
-  await saveRecord('video', downloadURL, new Date().toISOString(), currentLocation, description, videoId);
-} else {
-  console.error('Failed to get videoId from API');
-}
+          const videoId = await uploadVideoToAPI("1", currentLocation, currentDescription, downloadURL);
+          if (videoId) {
+            await saveRecord('video', downloadURL, new Date().toISOString(), currentLocation, currentDescription, videoId);
+          } else {
+            console.error('Failed to get videoId from API');
+          }
           setVideo('');
           setLocation('');
           setDescription('');
@@ -230,6 +260,7 @@ if (videoId) {
     console.error('Error uploading video:', error);
   }
 }
+
 async function uploadVideoToAPI(userId, location, description, videoUrl) {
   try {
     const response = await fetch('https://c5f9-108-53-61-3.ngrok-free.app/community-exploration/api/v1/videos/', {
@@ -246,18 +277,19 @@ async function uploadVideoToAPI(userId, location, description, videoUrl) {
     });
 
     const responseData = await response.json();
-    console.log('API Response:', responseData); // Log the entire response
+    console.log('API Response:', responseData);
 
     if (!response.ok || !responseData.data) {
       throw new Error('Failed to upload video data to the API or invalid response data');
     }
 
-    return responseData.data.videoId; // Return the videoId from the response
+    return responseData.data.videoId;
   } catch (error) {
     console.error('Error uploading video data to API:', error);
-    return null; // Return null in case of an error
+    return null;
   }
 }
+
 
   async function saveRecord(fileType, url, createdAt, location, description, videoId) {
     try {
