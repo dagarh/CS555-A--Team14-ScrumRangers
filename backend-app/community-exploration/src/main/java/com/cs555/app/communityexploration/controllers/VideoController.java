@@ -109,18 +109,18 @@ public class VideoController {
 	@ApiOperation(value = "Get comments based on the user or video", notes = "Provide the comments based on the user or video, if it exists in the database", response = ResponseDTO.class)
 	@GetMapping(value = {UrlConstants.COMMENTS_URL}, produces = "application/json")
 	public ResponseDTO<GetCommentsResponseDTO> getCommentsBasedOnUserOrVideo(
-			@RequestParam("userId") String userId,
-			@RequestParam("videoId") String videoId) {
+			@RequestParam(value = "userId", required = false) Integer userId,
+			@RequestParam(value = "videoId", required = false) String videoId) {
 
 		ResponseDTO<GetCommentsResponseDTO> responseBody = new ResponseDTO<>();
 		List<ErrorDTO> errorList = new ArrayList<>();
 
 		try {
 
-			GetCommentsResponseDTO commentsResposne = communityExplorationService.getCommentsBasedOnUserOrVideo(Integer.parseInt(userId), videoId, errorList);
+			GetCommentsResponseDTO commentsResposne = communityExplorationService.getCommentsBasedOnUserOrVideo(userId, videoId, errorList);
 
 			if (CollectionUtils.isEmpty(errorList)) {
-				// responseBody.setData(commentsResposne);
+				responseBody.setData(commentsResposne);
 			} else {
 				responseBody.setError(errorList);
 			}

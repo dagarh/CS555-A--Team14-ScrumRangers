@@ -16,5 +16,4 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 	
 	@Query("SELECT c FROM Comment c WHERE (:userId IS NULL OR c.userId = :userId) AND (:videoId IS NULL OR c.videoId = :videoId)")
     List<Comment> findCommentsByUserIdAndVideoId(Integer userId, String videoId);
-	
 }
