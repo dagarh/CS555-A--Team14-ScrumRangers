@@ -1,51 +1,56 @@
 import React, { useEffect, useState } from 'react';
 import { View, FlatList, Dimensions, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Video } from 'expo-av';
-import { collection, onSnapshot } from 'firebase/firestore';
-import { db } from '../firebaseConfig'; // Adjust this import path as needed
 
 const { width } = Dimensions.get('window');
-const videoSize = width / 2; // Divide the width by 3 for a 3x3 grid
+const videoSize = width / 2; // For a 3x3 grid
 
 function AllPosts() {
   const [files, setFiles] = useState([]);
-  const [selectedVideo, setSelectedVideo] = useState(null); // State to track the selected video
+  const [selectedVideo, setSelectedVideo] = useState(null);
 
   useEffect(() => {
-    // This function is called when the component mounts
-    const unsubscribe = onSnapshot(collection(db, 'files'), (snapshot) => {
-      const newFiles = snapshot.docs
-        .map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
-        .filter((file) => file.fileType === 'video' && file.liked === true); // Filtering liked videos
-  
-      setFiles(newFiles); // Updating state with the new files
-    });
-  
-    // The return function here is a clean-up function that's called when the component unmounts
-    return () => unsubscribe();
-  }, []); // Empty dependency array means this effect runs on mount and unmount
-  
+    // Fetch videos from the API
+    async function fetchVideos() {
+      try {
+        const response = await fetch('https://c5f9-108-53-61-3.ngrok-free.app/community-exploration/api/v1/videos/');
+        const json = await response.json();
+        setFiles(json.data.videos);
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+      }
+    }
+
+    fetchVideos();
+  }, []);
+
   const renderVideoItem = ({ item }) => {
-    const isPlaying = selectedVideo === item.id;
+    // Check if the video URL is from Firebase
+    const isFirebaseVideo = item.url.includes('firebasestorage.googleapis.com');
+  
+    // Determine if the video should be playing
+    const isPlaying = selectedVideo === item.videoId && isFirebaseVideo;
+  
+    // Render only Firebase videos
     return (
       <TouchableOpacity
         style={styles.videoContainer}
-        onPress={() => setSelectedVideo(isPlaying ? null : item.id)}
+        onPress={() => setSelectedVideo(isPlaying ? null : item.videoId)}
       >
-        <Video
-          source={{ uri: item.url }}
-          rate={1.0}
-          volume={1.0}
-          isMuted={!isPlaying}
-          resizeMode="cover"
-          shouldPlay={isPlaying}
-          isLooping
-          useNativeControls
-          style={StyleSheet.absoluteFill}
-        />
+        {isFirebaseVideo && (
+          <Video
+            source={{ uri: item.url }}
+            rate={1.0}
+            volume={1.0}
+            isMuted={!isPlaying}
+            resizeMode="cover"
+            shouldPlay={isPlaying}
+            isLooping
+            useNativeControls
+            style={StyleSheet.absoluteFill}
+            onError={(e) => console.error('Video Error:', e)}
+          />
+        )}
         {!isPlaying && (
           <View style={styles.videoOverlay}>
             <Text style={styles.videoLocation}>{item.location}</Text>
@@ -55,12 +60,11 @@ function AllPosts() {
       </TouchableOpacity>
     );
   };
-
   return (
     <View style={styles.container}>
       <FlatList
         data={files}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.videoId.toString()}
         numColumns={3}
         renderItem={renderVideoItem}
       />
@@ -79,6 +83,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative',
+    margin: 1, // Add a small margin for grid spacing
   },
   videoOverlay: {
     position: 'absolute',
@@ -91,10 +96,11 @@ const styles = StyleSheet.create({
   videoLocation: {
     color: 'white',
     fontWeight: 'bold',
+    padding: 4, // Add padding for the text
   },
   videoDescription: {
     color: 'white',
-    marginTop: 4,
+    marginBottom: 4, // Add margin to the bottom
   },
 });
 

@@ -41,16 +41,17 @@ function Settings({ navigation }) {
         <Ionicons name="arrow-forward" size={22} color="black" />
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.box}
-        onPress={() => navigateToScreen("ChangePassword")}
-      >
-        <Text style={styles.Set}>Change Password</Text>
-        <Ionicons name="arrow-forward" size={22} color="black" />
-      </TouchableOpacity>
-      <View style={styles.footer}>
+          <TouchableOpacity style={styles.box} onPress={() => navigateToScreen('ChangePassword')}>
+              <Text style={styles.Set}>Change Password</Text>
+              <Ionicons name="arrow-forward" size={22} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.box} onPress={() => navigateToScreen('citychange')}>
+              <Text style={styles.Set}>Change City</Text>
+              <Ionicons name="arrow-forward" size={22} color="black" />
+          </TouchableOpacity>
+          <View style={styles.footer}>
         <Image
-          source={require("../assets/City-black.png")}
+          source={require('../assets/City-black.png')}
           style={styles.logo}
         />
         <Text style={styles.footerText}>@Team 14-Scrum Rangers</Text>
